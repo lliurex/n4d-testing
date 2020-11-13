@@ -1,0 +1,29 @@
+import N4dLib
+import time
+import threading
+
+def server_changed(self,n4d_id,variable_name,value):
+
+	UNKNOWN_N4D_ID=-5
+	
+	if n4d_id == self.plugin_manager.plugins["ClientManager"]["object"].server_id:
+		self.n4d_id_validation_errors_count=0
+		if variable_name in self.variables_manager.triggers:
+			self.dprint("N4D ID validated. Executing triggers for %s ..."%variable_name)
+			for item in self.variables_manager.triggers[variable_name]:
+				try:
+					class_name,function=item
+					t=threading.Thread(target=function,args=(value,))
+					t.daemon=True
+					t.start()
+				except:
+					pass
+		
+		return N4dLib.build_call_successful_response(True)
+	
+	self.n4d_id_validation_errors_count+=1
+	time.sleep(Core.ERROR_SLEEP_TIME*self.n4d_id_validation_errors_count)
+	return N4dLib.build_call_failed_response(None,"Unknown N4D id",UNKNOWN_N4D_ID)
+
+#def set_variable
+

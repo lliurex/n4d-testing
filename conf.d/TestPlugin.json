@@ -1,0 +1,19 @@
+{
+	"SETUP":{
+		"type": "python",
+		"path": "TestPlugin.py",
+		"class": "TestPlugin"
+	},
+	"METHODS":
+	{
+		"test":{
+			"allowed_groups": ["adm"]
+		},
+		
+		"protected_args":{
+			"allowed_groups": ["adm"],
+			"protected_user": 0,
+			"protected_ip": 1
+		}
+	}
+}

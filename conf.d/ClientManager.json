@@ -1,0 +1,14 @@
+{
+	"SETUP":{
+		"type": "python",
+		"path": "ClientManager.py",
+		"class": "ClientManager"
+	},
+	"METHODS":
+	{
+		"register_client":{
+			"allowed_groups": ["anonymous"],
+			"protected_ip": 0
+		}
+	}
+}
