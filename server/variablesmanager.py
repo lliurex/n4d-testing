@@ -31,7 +31,7 @@ class VariablesManager:
 	def __init__(self):
 
 		#this should be the first thing called
-		self.core=core.Core.get_core()
+		self.core=n4d.server.core.Core.get_core()
 		
 		self.variables={}
 		self.triggers={}
@@ -54,14 +54,14 @@ class VariablesManager:
 	
 	def dprint(self,data):
 		
-		if core.Core.DEBUG:
+		if n4d.server.core.Core.DEBUG:
 			print("[VariablesManager] %s"%data)
 			
 	#def dprint
 
 	def dstdout(self,data):
 		
-		if core.Core.DEBUG:
+		if n4d.server.core.Core.DEBUG:
 			sys.stdout.write(str(data))
 			
 	#def dstdout
