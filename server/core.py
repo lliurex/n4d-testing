@@ -47,9 +47,12 @@ class Core:
 	LOG_DIR="/var/log/n4d/"
 	ERROR_SLEEP_TIME=2
 	
+	
 	@classmethod
 	def get_core(self,debug=False):
 		
+		if self.__module__ != "n4d.server.core":
+			raise Exception("Core import exception: You should import this library using 'n4d.server.core' instead of '%s'"%self.__module__)
 		if Core.SINGLETON==None:
 			Core.SINGLETON=Core(debug)
 			Core.SINGLETON.init()
@@ -134,7 +137,7 @@ class Core:
 				withstartup.append((self.plugin_manager.plugins[x]["object"],options))
 				
 			except Exception as e:
-				print(e)
+				self.dprint(e)
 				
 		change = True
 		while change:
@@ -353,9 +356,10 @@ class Core:
 					self.plugin_manager.plugins[item]["object"]=getattr(class_,item)()
 					self.dstdout("OK\n")
 				except Exception as e:
-					self.dstdout(e)
+					self.dstdout("FAILED\n")
+					self.dstdout("\t\t\t[!] " + str(e)+"\n")
 					self.plugin_manager.plugins[item]["object"]=None
-					self.dstdout("\n")
+					
 
 	#def load_plugins
 	
