@@ -165,6 +165,6 @@ class N4dServer:
 
 
 if __name__ == '__main__':
-	n4d=N4dServer()
-	n4d.init_server("",9800)
-	n4d.start_server()
+	n=N4dServer()
+	n.init_server("",9800)
+	n.start_server()
