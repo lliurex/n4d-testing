@@ -1,17 +1,5 @@
 import n4d.responses
-
-import core
-
-def dec(in_params,out_params):
-	
-	def inner(f):
-		
-		f.introspection={}
-		f.introspection["in"]=in_params
-		f.introspection["out"]=out_params
-		return f
-	
-	return inner
+import n4d.server.core
 
 
 class TestPlugin:
@@ -25,6 +13,9 @@ class TestPlugin:
 	#def init
 	
 	def startup(self,options={}):
+
+		if options["boot"]:
+			pass
 		
 		self.core.register_variable_trigger("REMOTE_VARIABLES_SERVER","TestPlugin",self.kolibri)
 		self.core.set_variable("PABLITO","CLAVITO")
@@ -37,15 +28,11 @@ class TestPlugin:
 		
 	#def
 	
-	@dec("ss","i")
 	def test(self,a,b):
-		
-		return N4dLib.build_call_successful_response(a+b)
-		
+		return n4d.responses.build_call_successful_response(a+b)
 		
 	def protected_args(self,user,ip):
-		
-		return N4dLib.build_call_successful_response((user,ip))
+		return n4d.responses.build_call_successful_response((user,ip))
 		
 	#def protected_args
 
