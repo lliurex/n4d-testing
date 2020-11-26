@@ -13,11 +13,11 @@ import netifaces
 import subprocess
 import threading
 
-import pluginmanager
-import pammanager
+import n4d.server.pluginmanager
+import n4d.server.pammanager
 import n4d.responses
-import variablesmanager
-import ticketsmanager
+import n4d.server.variablesmanager
+import n4d.server.ticketsmanager
 
 
 UNKNOWN_CLASS=-40

@@ -1,8 +1,9 @@
-import core
 import glob
 import json
 import os
 import configparser
+
+import n4d.server.core
 
 class PluginManager:
 	
