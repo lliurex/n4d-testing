@@ -73,7 +73,7 @@ class ClientManager:
 					remote_server=ret["return"]
 				
 					server_ip=socket.gethostbyname(remote_server)
-					if self.get_ip()!=server_ip:
+					if server_ip not in self.core.get_all_ips():
 						
 						context=ssl._create_unverified_context()
 						c = xmlrpc.client.ServerProxy('https://%s:9800'%server_ip,context=context,allow_none=True)
