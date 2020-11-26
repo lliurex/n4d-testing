@@ -7,7 +7,7 @@ import socket
 import os
 import json
 
-import core
+import n4d.server.core
 
 class ClientManager:
 	
@@ -19,7 +19,7 @@ class ClientManager:
 	def __init__(self):
 		
 		self.clients={}
-		self.core=core.Core.get_core()
+		self.core=n4d.server.core.Core.get_core()
 		self.server_id=None
 		if not os.path.exists(ClientManager.RUN_DIR):
 			os.makedirs(ClientManager.RUN_DIR)
