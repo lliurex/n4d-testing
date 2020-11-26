@@ -213,14 +213,10 @@ class VariablesManager:
 				context=ssl._create_unverified_context()
 				s = xmlrpc.client.ServerProxy('https://%s:9779'%self.variables["REMOTE_VARIABLES_SERVER"]["value"],context=context,allow_none=True)
 				try:
-					#ret=s.get_variable(name,full_description)
-					#if ret["status"]==0:
-					#	return ret
-					
-					#HACK
-					ret=s.get_variable("","VariablesManager",name)
-					return ret
-					
+					ret=s.get_variable(name,full_description)
+					if ret["status"]==0:
+						return ret
+
 				except Exception as e:
 					tback=traceback.format_exc()
 					return n4d.responses.build_call_failed_response(None,str(e),VariablesManager.REMOTE_VARIABLES_SERVER_ERROR,tback)
