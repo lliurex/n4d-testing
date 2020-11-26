@@ -94,8 +94,8 @@ class Core:
 
 	def init(self):
 		
-		self.variables_manager=variablesmanager.VariablesManager()
-		self.tickets_manager=ticketsmanager.TicketsManager()
+		self.variables_manager=n4d.server.variablesmanager.VariablesManager()
+		self.tickets_manager=n4d.server.ticketsmanager.TicketsManager()
 		self.load_builtin_functions()
 		self.load_plugins()
 		self.execute_startups()
@@ -343,7 +343,7 @@ class Core:
 	def load_plugins(self):
 		
 		self.dprint("Initializing plugins ...")
-		self.plugin_manager=pluginmanager.PluginManager()
+		self.plugin_manager=n4d.server.pluginmanager.PluginManager()
 		
 		for item in self.plugin_manager.plugins:
 			if "found" in self.plugin_manager.plugins[item] and self.plugin_manager.plugins[item]["found"]:
@@ -458,7 +458,7 @@ class Core:
 			return True
 
 		#self.dprint("PAM_AUTH")
-		pv=PamManager.PamManager()
+		pv=n4d.server.pammanager.PamManager()
 		
 		if pv.authentication(user,password):
 			if user not in self.validation_history:
