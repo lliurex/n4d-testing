@@ -22,7 +22,7 @@ if __name__ == '__main__':
 		package_dir = {'n4d.server':'server','n4d':'n4d','n4d.responses':'responses'},
 		data_files = [('share/n4d/python-plugins','python-plugins/ClientManager.py'),
 				('/etc/n4d/conf.d','conf.d/ClientManager.py')
-		]
+		],
 		classifiers=[
 			'Development Status :: 4 - Beta',
 			'Environment :: Console'
