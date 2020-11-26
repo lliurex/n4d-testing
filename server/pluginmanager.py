@@ -21,7 +21,7 @@ class PluginManager:
 	def __init__(self):
 		
 		#this should be the first thing called
-		self.core=core.Core.get_core()
+		self.core=n4d.server.core.Core.get_core()
 
 		self.plugin_path={}
 		self.plugin_path["python"]=PluginManager.PYTHON_PLUGINS_PATH

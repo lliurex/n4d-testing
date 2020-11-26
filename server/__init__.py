@@ -128,7 +128,7 @@ class N4dServer:
 	def init_server(self,host,port):
 		
 		dprint("Starting N4D ...")
-		self.core=core.Core.get_core(DEBUG)
+		self.core=n4d.server.core.Core.get_core(DEBUG)
 		self.server_host=host
 		self.server_port=port
 		self.handler=N4dServer.N4dCallHandler
