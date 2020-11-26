@@ -1,4 +1,3 @@
-import N4dLib
 
 def delete_variable(self,auth,variable_name):
 

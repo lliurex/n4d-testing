@@ -1,4 +1,3 @@
-import N4dLib
 
 def set_variable(self,auth,variable_name,value,attr=None):
 
