@@ -73,9 +73,8 @@ class ClientManager:
 					remote_server=ret["return"]
 				
 					server_ip=socket.gethostbyname(remote_server)
-					#if self.get_ip()!=server_ip:
-					if True:
-					
+					if self.get_ip()!=server_ip:
+						
 						context=ssl._create_unverified_context()
 						c = xmlrpc.client.ServerProxy('https://%s:9800'%server_ip,context=context,allow_none=True)
 						mac=self.core.get_mac_from_device(self.core.route_get_ip(server_ip))
