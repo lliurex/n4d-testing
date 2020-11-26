@@ -1,0 +1,25 @@
+Source: n4d
+Section: python
+Priority: standard
+Maintainer: Equipo LliureX <lliurex@gva.es> 
+Build-Depends: debhelper (>=10),
+               dh-python,
+               python3-setuptools,
+	       python3-all
+Standards-Version: 4.1.2
+Homepage: http://lliurex.net
+Vcs-Browser: https://github.com/lliurex/n4d
+
+Package: n4d
+Architecture: all
+Pre-Depends: openssl
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, python3-n4d
+Description: Pluggable XMLRPC Server
+  This package configures a xmlrpc server to allow the remote execution of
+  remote functions.
+
+Package: python3-n4d
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, python3, python3-pam, python3-pyinotify, python3-netifaces
+Description: Main python3 n4d package. 
+  Provides server and basic libraries.
