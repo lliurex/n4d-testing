@@ -7,9 +7,12 @@ import n4d.server.core
 
 class PluginManager:
 	
-	PYTHON_PLUGINS_PATH="python-plugins/"
+	
+	N4D_BASE_DIR="/usr/share/n4d/"
+	BASE_CONF_PATH="/etc/n4d/"
+	PYTHON_PLUGINS_PATH=N4D_BASE_DIR + "python-plugins/"
 	OLD_PYTHON_PLUGINS_PATH="/usr/share/n4d/python-plugins/"
-	CONF_PATH="conf.d/"
+	CONF_PATH=BASE_CONF_PATH+"conf.d/"
 	
 	def dprint(self,data):
 		
