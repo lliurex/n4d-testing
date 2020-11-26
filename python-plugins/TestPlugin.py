@@ -1,4 +1,5 @@
-import N4dLib
+import n4d.responses
+
 import core
 
 def dec(in_params,out_params):

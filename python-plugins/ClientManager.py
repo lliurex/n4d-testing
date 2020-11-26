@@ -1,5 +1,4 @@
-import N4dLib
-import core
+import n4d.responses
 import xmlrpc.client
 import ssl
 import threading
@@ -7,6 +6,8 @@ import time
 import socket
 import os
 import json
+
+import core
 
 class ClientManager:
 	
@@ -22,7 +23,6 @@ class ClientManager:
 		self.server_id=None
 		if not os.path.exists(ClientManager.RUN_DIR):
 			os.makedirs(ClientManager.RUN_DIR)
-		
 		self.load_clients_file()
 		self.start_register_to_server_thread()
 		
@@ -51,7 +51,7 @@ class ClientManager:
 		self.save_clients_file()
 		#self.dprint("Client [%s] %s - %s registered"%(machine_id,mac,protected_ip))
 		
-		return N4dLib.build_call_successful_response(self.core.id,"Client added")
+		return n4d.responses.build_call_successful_response(self.core.id,"Client added")
 		
 	#def register_instance
 	

@@ -1,4 +1,4 @@
-import N4dLib
+import n4d.responses
 import time
 import threading
 
@@ -19,11 +19,11 @@ def server_changed(self,n4d_id,variable_name,value):
 				except:
 					pass
 		
-		return N4dLib.build_call_successful_response(True)
+		return n4d.responses.build_call_successful_response(True)
 	
 	self.n4d_id_validation_errors_count+=1
 	time.sleep(Core.ERROR_SLEEP_TIME*self.n4d_id_validation_errors_count)
-	return N4dLib.build_call_failed_response(None,"Unknown N4D id",UNKNOWN_N4D_ID)
+	return n4d.responses.build_call_failed_response(None,"Unknown N4D id",UNKNOWN_N4D_ID)
 
 #def set_variable
 

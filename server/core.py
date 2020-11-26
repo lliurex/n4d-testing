@@ -13,9 +13,9 @@ import netifaces
 import subprocess
 import threading
 
-import pluginManager
-import PamManager
-import N4dLib
+import pluginmanager
+import pammanager
+import n4d.responses
 import variablesmanager
 import ticketsmanager
 
@@ -64,7 +64,6 @@ class Core:
 		return ''.join(random.choice(chars) for _ in range(size))
 		
 	#def get_random_id
-
 
 	class Builtin:
 		pass
@@ -344,7 +343,7 @@ class Core:
 	def load_plugins(self):
 		
 		self.dprint("Initializing plugins ...")
-		self.plugin_manager=pluginManager.PluginManager()
+		self.plugin_manager=pluginmanager.PluginManager()
 		
 		for item in self.plugin_manager.plugins:
 			if "found" in self.plugin_manager.plugins[item] and self.plugin_manager.plugins[item]["found"]:
@@ -543,7 +542,7 @@ class Core:
 		ret=self.validate_auth(auth)
 		
 		if ret["status"]!=0:
-			return N4dLib.build_call_failed_response(None,HUMAN_RESPONSES[USER_NOT_VALIDATED],USER_NOT_VALIDATED)
+			return n4d.responses.build_call_failed_response(None,HUMAN_RESPONSES[USER_NOT_VALIDATED],USER_NOT_VALIDATED)
 			
 		groups=ret["return"][1]
 		group_found=False
@@ -554,9 +553,9 @@ class Core:
 				break
 				
 		if not group_found:
-			return N4dLib.build_call_failed_response(None,HUMAN_RESPONSES[USER_NOT_ALLOWED],USER_NOT_ALLOWED)
+			return n4d.responses.build_call_failed_response(None,HUMAN_RESPONSES[USER_NOT_ALLOWED],USER_NOT_ALLOWED)
 		else:
-			return N4dLib.build_call_successful_response(groups,HUMAN_RESPONSES[USER_ALLOWED])		
+			return n4d.responses.build_call_successful_response(groups,HUMAN_RESPONSES[USER_ALLOWED])		
 		
 	#def builtin_validation
 	
@@ -577,9 +576,9 @@ class Core:
 			auth_type="User validated"
 
 		if validated:
-			return N4dLib.build_call_successful_response([validated,groups],auth_type)
+			return n4d.responses.build_call_successful_response([validated,groups],auth_type)
 		else:
-			return N4dLib.build_authentication_failed_response()
+			return n4d.responses.build_authentication_failed_response()
 
 	#def validate_user
 	
@@ -610,9 +609,9 @@ class Core:
 				
 			
 		if validated:
-			return N4dLib.build_call_successful_response([validated,groups],auth_type)
+			return n4d.responses.build_call_successful_response([validated,groups],auth_type)
 		else:
-			return N4dLib.build_authentication_failed_response()
+			return n4d.responses.build_authentication_failed_response()
 
 	#def test	
 
@@ -662,10 +661,10 @@ class Core:
 				response=getattr(self.plugin_manager.plugins[n4d_call_data["class"]]["object"],n4d_call_data["method"])(*n4d_call_data["params"])
 			else:
 				self.dprint("[!] %s@%s not allowed to run %s.%s ."%(n4d_call_data["user"],n4d_call_data["client_address"],n4d_call_data["class"],n4d_call_data["method"]))
-				response=N4dLib.build_user_not_allowed_response()
+				response=n4d.responses.build_user_not_allowed_response()
 			
 		else:
-			response=N4dLib.build_unknown_method_response()
+			response=n4d.responses.build_unknown_method_response()
 			
 		return response
 		
@@ -680,7 +679,7 @@ class Core:
 			# If no exception is raised we are ok to authenticate
 			if not self.authenticate(n4d_call_data):
 				
-				return N4dLib.build_authentication_failed_response()
+				return n4d.responses.build_authentication_failed_response()
 			
 			# If auth is ok we execute function
 
@@ -692,10 +691,10 @@ class Core:
 				if n4d_call_data["class"] in self.plugin_manager.plugins:
 					response=self._dispatch_plugin_function(n4d_call_data)
 				else:
-					response=N4dLib.build_unknown_class_response()
+					response=n4d.responses.build_unknown_class_response()
 			
-			if not N4dLib.is_valid_response(response):
-					response=N4dLib.build_invalid_response(response)
+			if not n4d.responses.is_valid_response(response):
+					response=n4d.responses.build_invalid_response(response)
 			
 			return response
 			
@@ -705,9 +704,9 @@ class Core:
 			self.dprint("[!] Exception captured [!]")
 			self.dprint(tback)
 			if type(e)==TypeError:
-				response=N4dLib.build_invalid_arguments_response(None,str(e))
+				response=n4d.responses.build_invalid_arguments_response(None,str(e))
 			else:
-				response=N4dLib.build_call_failed_response(None,str(e))
+				response=n4d.responses.build_call_failed_response(None,str(e))
 			response["traceback"]=tback
 			return response
 			raise e
