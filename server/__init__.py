@@ -12,7 +12,7 @@ import traceback
 import locale
 locale.setlocale(locale.LC_ALL, 'C.UTF-8')
 
-import core
+import n4d.server.core
 
 DEBUG=True
 
