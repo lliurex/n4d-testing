@@ -10,7 +10,7 @@ import ssl
 import traceback
 
 
-import core
+import n4d.server.core
 import n4d.responses
 
 class VariablesManager:
