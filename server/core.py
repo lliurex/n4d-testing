@@ -52,7 +52,7 @@ class Core:
 	def get_core(self,debug=False):
 		
 		if self.__module__ != "n4d.server.core":
-			raise Exception("Core import exception: You should import this library using 'n4d.server.core' instead of '%s'"%self.__module__)
+			raise Exception("Core singletion exception: You should access Core using 'n4d.server.core' instead of '%s'"%self.__module__)
 		if Core.SINGLETON==None:
 			Core.SINGLETON=Core(debug)
 			Core.SINGLETON.init()
