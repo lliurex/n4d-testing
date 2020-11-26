@@ -20,8 +20,8 @@ if __name__ == '__main__':
 		platforms='UNIX',
 		packages = ['n4d','n4d.server','n4d.responses'],
 		package_dir = {'n4d.server':'server','n4d':'n4d','n4d.responses':'responses'},
-		data_files = [('share/n4d/python-plugins','python-plugins/ClientManager.py'),
-				('/etc/n4d/conf.d','conf.d/ClientManager.py')
+		data_files = [('share/n4d/python-plugins/',['python-plugins/ClientManager.py']),
+				('/etc/n4d/conf.d/',['conf.d/ClientManager.json'])
 		],
 		classifiers=[
 			'Development Status :: 4 - Beta',
