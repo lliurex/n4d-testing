@@ -74,6 +74,7 @@ class Core:
 	def __init__(self,debug_mode=False):
 		
 		Core.DEBUG=debug_mode
+		self.boot=False
 		
 		self.dprint("INIT ... ")
 		self.id=self.get_random_id()
@@ -131,7 +132,7 @@ class Core:
 					continue
 				
 				options={}
-				options["boot"]=False
+				options["boot"]=self.boot
 				if not os.path.exists(Core.RUN_TOKEN):
 					options["boot"]=True
 				withstartup.append((self.plugin_manager.plugins[x]["object"],options))
@@ -306,6 +307,9 @@ class Core:
 	#def create_n4d_dirs
 	
 	def create_token(self):
+		
+		if not os.path.exists(Core.RUN_TOKEN):
+			self.boot=True
 		
 		f=open(Core.RUN_TOKEN,"w")
 		f.write(str(os.getpid()))
