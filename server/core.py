@@ -36,7 +36,8 @@ DEFAULT_ALLOWED_GROUPS=["sudo","admins","root"]
 
 class Core:
 	
-	BUILTIN_FUNCTIONS_PATH="built-in/"
+	BASE_DIR="/usr/share/n4d/"
+	BUILTIN_FUNCTIONS_PATH=BASE_DIR+"built-in/"
 	N4D_KEY_PATH="/etc/n4d/key"
 	PUBLIC_BASE_FUNCTIONS=[]
 	DEBUG=False
