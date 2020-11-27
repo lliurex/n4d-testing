@@ -16,7 +16,6 @@ import n4d.responses
 class VariablesManager:
 	
 	VARIABLES_DIR="/var/lib/n4d/variables/"
-	VARIABLES_DIR="/var/lib/n4d/variables-dir/"
 	RUN_DIR="/run/n4d/variables/"
 	INBOX="/var/lib/n4d/variables-inbox/"
 	TRASH="/var/lib/n4d/variables-trash/"
@@ -36,18 +35,10 @@ class VariablesManager:
 		self.variables={}
 		self.triggers={}
 		
-		self.create_run_dir()
+		self.create_variables_dirs()
+		
 		self.load_variables()
-		
-		'''
-		t=threading.Thread(target=self.check_clients,args=())
-		t.daemon=True
-		t.start()
-		
-		self.read_inbox(False)
-		self.empty_trash(False)
-		'''
-		
+
 		#self.save_variables()
 		
 	#def init
@@ -66,7 +57,16 @@ class VariablesManager:
 			
 	#def dstdout
 	
-	def create_run_dir(self):
+	def create_variables_dir(self):
+		
+		if not os.path.exists(VariablesManager.VARIABLES_DIR):
+			os.makedirs(VariablesManager.VARIABLES_DIR)
+		
+		if not os.path.exists(VariablesManager.INBOX):
+			os.makedirs(VariablesManager.INBOX)
+		
+		if not os.path.exists(VariablesManager.TRASH):
+			os.makedirs(VariablesManager.TRASH)
 		
 		if not os.path.exists(VariablesManager.RUN_DIR):
 			os.makedirs(VariablesManager.RUN_DIR)
