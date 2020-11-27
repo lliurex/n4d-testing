@@ -57,7 +57,7 @@ class VariablesManager:
 			
 	#def dstdout
 	
-	def create_variables_dir(self):
+	def create_variables_dirs(self):
 		
 		if not os.path.exists(VariablesManager.VARIABLES_DIR):
 			os.makedirs(VariablesManager.VARIABLES_DIR)
