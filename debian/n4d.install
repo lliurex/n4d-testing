@@ -1,1 +1,2 @@
 n4d.install-files/*	/
+built-in/*	/usr/share/n4d/built-in
