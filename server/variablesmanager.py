@@ -271,7 +271,7 @@ class VariablesManager:
 			try:
 				#self.dprint("Notifying %s changes to %s..."%(variable_name,cm.clients[client]["ip"]))
 				context=ssl._create_unverified_context()
-				s = xmlrpc.client.ServerProxy('https://%s:9800'%cm.clients[client]["ip"],context=context,allow_none=True)
+				s = xmlrpc.client.ServerProxy('https://%s:9779'%cm.clients[client]["ip"],context=context,allow_none=True)
 				s.server_changed(self.core.id,variable_name,value)
 			except:
 				pass
