@@ -76,7 +76,7 @@ class ClientManager:
 					if server_ip not in self.core.get_all_ips():
 						
 						context=ssl._create_unverified_context()
-						c = xmlrpc.client.ServerProxy('https://%s:9800'%server_ip,context=context,allow_none=True)
+						c = xmlrpc.client.ServerProxy('https://%s:9779'%server_ip,context=context,allow_none=True)
 						mac=self.core.get_mac_from_device(self.core.route_get_ip(server_ip))
 						f=open(ClientManager.MACHINE_FILE)
 						machine_id=f.readline().strip("\n")

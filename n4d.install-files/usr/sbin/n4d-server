@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+
+import n4d.server
+
+s=n4d.server.N4dServer()
+s.init_server('',9779)
+s.start_server()
