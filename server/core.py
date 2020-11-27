@@ -75,7 +75,7 @@ class Core:
 		
 		Core.DEBUG=debug_mode
 		self.boot=False
-		
+	
 		self.dprint("INIT ... ")
 		self.id=self.get_random_id()
 		self.create_n4d_dirs()
@@ -298,23 +298,33 @@ class Core:
 	
 	def create_n4d_dirs(self):
 		
-		if not os.path.exists(Core.RUN_DIR):
-			os.makedirs(Core.RUN_DIR)
-			
-		if not os.path.exists(Core.LOG_DIR):
-			os.makedirs(Core.LOG_DIR)
+		try:
+			if not os.path.exists(Core.RUN_DIR):
+				os.makedirs(Core.RUN_DIR)
+				
+			if not os.path.exists(Core.LOG_DIR):
+				os.makedirs(Core.LOG_DIR)
+		except:
+			self.dprint("You need root privileges to run this daemon")
+			sys.exit(1)
 			
 	#def create_n4d_dirs
 	
 	def create_token(self):
 		
-		if not os.path.exists(Core.RUN_TOKEN):
-			self.boot=True
+		try:
 		
-		f=open(Core.RUN_TOKEN,"w")
-		f.write(str(os.getpid()))
-		f.close()
-		
+			if not os.path.exists(Core.RUN_TOKEN):
+				self.boot=True
+			
+			f=open(Core.RUN_TOKEN,"w")
+			f.write(str(os.getpid()))
+			f.close()
+			
+		except:
+			self.dprint("You need root privileges to run this daemon")
+			sys.exit(1)
+
 	#def create_token
 	
 	def get_user_groups(self,user):
