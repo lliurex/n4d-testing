@@ -125,6 +125,8 @@ class Core:
 		
 		for x in self.plugin_manager.plugins:
 			try:
+				if not self.plugin_manager.plugins[x]["found"]:
+					continue
 				if x in self.executed_startups:
 					continue
 				if not hasattr(self.plugin_manager.plugins[x]["object"],'startup'):
