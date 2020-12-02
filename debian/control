@@ -5,7 +5,8 @@ Maintainer: Equipo LliureX <lliurex@gva.es>
 Build-Depends: debhelper (>=10),
                dh-python,
                python3-setuptools,
-	       python3-all
+	       python3-all,
+	       python3-pam
 Standards-Version: 4.1.2
 Homepage: http://lliurex.net
 Vcs-Browser: https://github.com/lliurex/n4d
