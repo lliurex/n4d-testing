@@ -118,3 +118,42 @@ class ClientManager:
 		
 	#def load_clients_file
 	
+	def get_client_list(self,force_check=False):
+		
+		if force_check:
+			self.check_clients(True)
+		return n4d.responses.build_call_successful_response(self.clients)
+		
+	#def get_client_list
+	
+	def check_clients(self,wait_for_result=False):
+		
+		if not wait_for_result:
+			for machine_id in self.clients:
+				t=threading.Thread(target=self.check_client,args=(machine_id,))
+				t.daemon=True
+				t.start()
+			return n4d.responses.build_call_successful_response(self.clients,"check_clients thread launched. Current variable is probably not up to date")
+		else:
+			for machine_id in self.clients:
+				self.check_client(machine_id)
+			return n4d.responses.build_call_successful_response(self.clients)
+		
+	#def check_clients
+	
+	def check_client(self,machine_id):
+		
+		ip=self.clients[machine_id]["ip"]
+		context=ssl._create_unverified_context()
+		self.clients[machine_id]["last_check"]=int(time.time())
+		try:
+			c = xmlrpc.client.ServerProxy('https://%s:9779'%ip,context=context,allow_none=True)
+			c.get_methods()
+			self.clients[machine_id]["missed_pings"]=0
+		except:
+			self.clients[machine_id]["missed_pings"]+=1
+			
+		return n4d.responses.build_call_successful_response(self.clients[machine_id])
+			
+	#def check_client
+	
