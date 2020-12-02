@@ -16,7 +16,7 @@ HUMAN_RESPONSES[USER_NOT_ALLOWED]="User not allowed"
 HUMAN_RESPONSES[AUTHENTICATION_FAILED]="Authentication failed"
 HUMAN_RESPONSES[INVALID_RESPONSE]="Invalid response"
 HUMAN_RESPONSES[CALL_FAILED]="Call failed"
-HUMAN_RESPONSES[UNHANDLED_ERROR]="Unhandled exception"
+HUMAN_RESPONSES[UNHANDLED_ERROR]="Unhandled error"
 HUMAN_RESPONSES[INVALID_ARGUMENTS]="Invalid arguments"
 HUMAN_RESPONSES[CALL_SUCCESSFUL]="Call successful"
 
@@ -111,13 +111,25 @@ def build_invalid_arguments_response(ret_value,ret_msg=HUMAN_RESPONSES[INVALID_A
 #def build_invalid_arguments_response
 
 
-def build_call_failed_response(ret_value,ret_msg=HUMAN_RESPONSES[CALL_FAILED],error_code=-1,tback_txt=""):
+def build_call_failed_response(ret_value,ret_msg=HUMAN_RESPONSES[CALL_FAILED],error_code=-1):
 	
 	ret={}
 	ret["msg"]=ret_msg
 	ret["status"]=CALL_FAILED
 	ret["return"]=ret_value
 	ret["error_code"]=error_code
+	
+	return ret
+	
+#def build_response
+
+
+def build_unhandled_error_response(ret_value,ret_msg=HUMAN_RESPONSES[UNHANDLED_ERROR],tback_txt=""):
+	
+	ret={}
+	ret["msg"]=ret_msg
+	ret["status"]=UNHANDLED_ERROR
+	ret["return"]=ret_value
 	ret["traceback"]=tback_txt
 	
 	return ret

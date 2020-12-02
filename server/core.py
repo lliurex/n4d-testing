@@ -24,8 +24,6 @@ UNKNOWN_CLASS=-40
 UNKNOWN_METHOD=-30
 USER_NOT_ALLOWED=-20
 AUTHENTICATION_ERROR=-10
-CALL_FAILED=-1
-CALL_SUCCESSFUL=0
 
 ANONYMOUS_AUTH=50
 PAM_AUTH=60
@@ -727,8 +725,8 @@ class Core:
 			if type(e)==TypeError:
 				response=n4d.responses.build_invalid_arguments_response(None,str(e))
 			else:
-				response=n4d.responses.build_call_failed_response(None,str(e))
-			response["traceback"]=tback
+				response=n4d.responses.build_unhandled_error_response(None,str(e),tback)
+
 			return response
 			raise e
 					
