@@ -434,6 +434,7 @@ class Core:
 		try:
 			
 			n4d_call_data=params[0]
+			n4d_call_data["error"]=None
 			n4d_call_data["method"]=method
 			
 			if method in Core.PUBLIC_BASE_FUNCTIONS:
@@ -451,7 +452,11 @@ class Core:
 			return n4d_call_data
 			
 		except Exception as e:
-			raise e
+			n4d_call_data["error"]=str(e)
+			tback=traceback.format_exc()
+			n4d_call_data["traceback"]=tback
+			return n4d_call_data
+			
 		
 	#def extract_extra_params
 	
@@ -694,6 +699,9 @@ class Core:
 		try:
 
 			n4d_call_data=self.parse_params(method,params)
+
+			if n4d_call_data["error"]!=None:
+				return n4d.responses.build_unhandled_error_response(None,n4d_call_data["error"],n4d_call_data["traceback"])
 
 			# If no exception is raised we are ok to authenticate
 			if not self.authenticate(n4d_call_data):
