@@ -9,6 +9,6 @@ def get_methods(self,*args):
 		if core.plugin_manager.plugins[x]["found"]:
 			ret[x]=core.plugin_manager.plugins[x]["methods"]
 	
-	return n4d.responses.build_call_successful_response(ret)
+	return n4d.responses.build_successful_call_response(ret)
 
 #def test

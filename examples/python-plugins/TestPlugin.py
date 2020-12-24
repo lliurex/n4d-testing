@@ -29,10 +29,10 @@ class TestPlugin:
 	#def
 	
 	def test(self,a,b):
-		return n4d.responses.build_call_successful_response(a+b)
+		return n4d.responses.build_successful_call_response(a+b)
 		
 	def protected_args(self,user,ip):
-		return n4d.responses.build_call_successful_response((user,ip))
+		return n4d.responses.build_successful_call_response((user,ip))
 		
 	#def protected_args
 

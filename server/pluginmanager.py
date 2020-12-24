@@ -30,37 +30,43 @@ class PluginManager:
 		self.plugin_path["python"]=PluginManager.PYTHON_PLUGINS_PATH
 		#self.plugin_path["python"]=PluginManager.OLD_PYTHON_PLUGINS_PATH
 		
-		self.plugins=self.get_plugins()
+		self.plugins={}
+		self.get_plugins()
 		#self.plugins=self.get_old_plugins()
 		
 	#def init
 	
 	def get_plugins(self):
 		
-		ret={}
-		
 		for item in glob.glob(PluginManager.CONF_PATH+"*.json"):
-			
-			try:
-				plugin_name=item.split("/")[-1].split(".json")[0]
-				ret[plugin_name]={}
-				f=open(item)
-				data=json.load(f)
-				f.close()
-				ret[plugin_name]["setup"]=data["SETUP"]
-				ret[plugin_name]["methods"]=data["METHODS"]
-				ret[plugin_name]["plugin_path"]=self.plugin_path[ret[plugin_name]["setup"]["type"]]+ret[plugin_name]["setup"]["path"]
-				if os.path.exists(ret[plugin_name]["plugin_path"]):
-					ret[plugin_name]["found"]=True
-				else:
-					ret[plugin_name]["found"]=False
-				
-			except Exception as e:
-				ret[plugin_name]["found"]=False
+			self.read_plugin_conf(item)
 
-		return ret
-		
 	#def get_python_plugins_list
+	
+	def read_plugin_conf(self,file_path):
+
+		plugin_name=None
+		try:
+			plugin_name=item.split("/")[-1].split(".json")[0]	
+			self.plugins[plugin_name]={}
+			f=open(item)
+			data=json.load(f)
+			f.close()
+			self.plugins[plugin_name]["setup"]=data["SETUP"]
+			self.plugins[plugin_name]["methods"]=data["METHODS"]
+			self.plugins[plugin_name]["plugin_path"]=self.plugin_path[self.plugins[plugin_name]["setup"]["type"]]+self.plugins[plugin_name]["setup"]["path"]
+			if os.path.exists(self.plugins[plugin_name]["plugin_path"]):
+				self.plugins[plugin_name]["found"]=True
+			else:
+				self.plugins[plugin_name]["found"]=False
+			
+		except Exception as e:
+			if plugin_name!=None:
+				self.plugins[plugin_name]["found"]=False
+				
+		return plugin_name
+				
+	#def read_plugin_conf
 	
 	def get_old_plugins(self):
 		

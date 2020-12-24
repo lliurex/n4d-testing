@@ -364,19 +364,37 @@ class Core:
 		self.plugin_manager=n4d.server.pluginmanager.PluginManager()
 		
 		for item in self.plugin_manager.plugins:
-			if "found" in self.plugin_manager.plugins[item] and self.plugin_manager.plugins[item]["found"]:
-				self.dstdout("\t\t%s ... "%item)
-				try:
-					class_=imp.load_source(item,self.plugin_manager.plugins[item]["plugin_path"])
-					self.plugin_manager.plugins[item]["object"]=getattr(class_,item)()
-					self.dstdout("OK\n")
-				except Exception as e:
-					self.dstdout("FAILED\n")
-					self.dstdout("\t\t\t[!] " + str(e)+"\n")
-					self.plugin_manager.plugins[item]["object"]=None
-					
+			self._load_plugin(item,True)
 
 	#def load_plugins
+	
+	def _load_plugin(self,plugin,verbose=False):
+		
+		if "found" in self.plugin_manager.plugins[plugin] and self.plugin_manager.plugins[plugin]["found"]:
+			if verbose:
+				self.dstdout("\t\t%s ... "%item)
+			try:
+				class_=imp.load_source(plugin,self.plugin_manager.plugins[plugin]["plugin_path"])
+				self.plugin_manager.plugins[plugin]["object"]=getattr(class_,plugin)()
+				if verbose:
+					self.dstdout("OK\n")
+				return True
+			except Exception as e:
+				if verbose:
+					self.dstdout("FAILED\n")
+					self.dstdout("\t\t\t[!] " + str(e)+"\n")
+				self.plugin_manager.plugins[plugin]["object"]=None
+				return False
+				
+	#def _load_plugin
+	
+	def load_plugin_on_runtime(self,plugin_conf):
+
+		plugin=self.plugin_manager.read_plugin_conf(plugin_conf)
+		if plugin!=None:
+			return self._load_plugin(plugin)
+
+	#def _load_plugin
 	
 	def parse_params(self,method,params):
 		
@@ -434,6 +452,7 @@ class Core:
 		try:
 			
 			n4d_call_data=params[0]
+			n4d_call_data["error"]=None
 			n4d_call_data["method"]=method
 			
 			if method in Core.PUBLIC_BASE_FUNCTIONS:
@@ -451,7 +470,11 @@ class Core:
 			return n4d_call_data
 			
 		except Exception as e:
-			raise e
+			n4d_call_data["error"]=str(e)
+			tback=traceback.format_exc()
+			n4d_call_data["traceback"]=tback
+			return n4d_call_data
+			
 		
 	#def extract_extra_params
 	
@@ -561,7 +584,7 @@ class Core:
 		ret=self.validate_auth(auth)
 		
 		if ret["status"]!=0:
-			return n4d.responses.build_call_failed_response(None,HUMAN_RESPONSES[USER_NOT_VALIDATED],USER_NOT_VALIDATED)
+			return n4d.responses.build_failed_call_response(None,HUMAN_RESPONSES[USER_NOT_VALIDATED],USER_NOT_VALIDATED)
 			
 		groups=ret["return"][1]
 		group_found=False
@@ -572,9 +595,9 @@ class Core:
 				break
 				
 		if not group_found:
-			return n4d.responses.build_call_failed_response(None,HUMAN_RESPONSES[USER_NOT_ALLOWED],USER_NOT_ALLOWED)
+			return n4d.responses.build_failed_call_response(None,HUMAN_RESPONSES[USER_NOT_ALLOWED],USER_NOT_ALLOWED)
 		else:
-			return n4d.responses.build_call_successful_response(groups,HUMAN_RESPONSES[USER_ALLOWED])		
+			return n4d.responses.build_successful_call_response(groups,HUMAN_RESPONSES[USER_ALLOWED])		
 		
 	#def builtin_validation
 	
@@ -595,7 +618,7 @@ class Core:
 			auth_type="User validated"
 
 		if validated:
-			return n4d.responses.build_call_successful_response([validated,groups],auth_type)
+			return n4d.responses.build_successful_call_response([validated,groups],auth_type)
 		else:
 			return n4d.responses.build_authentication_failed_response()
 
@@ -628,7 +651,7 @@ class Core:
 				
 			
 		if validated:
-			return n4d.responses.build_call_successful_response([validated,groups],auth_type)
+			return n4d.responses.build_successful_call_response([validated,groups],auth_type)
 		else:
 			return n4d.responses.build_authentication_failed_response()
 
@@ -654,10 +677,17 @@ class Core:
 				groups=["anonymous"]
 			
 			ok=False
+			
 			for group in groups:
 				if group in self.plugin_manager.plugins[n4d_call_data["class"]]["methods"][n4d_call_data["method"]]["allowed_groups"]:
 					ok=True
 					break
+					
+			if not ok:
+				if "allowed_users" in self.plugin_manager.plugins[n4d_call_data["class"]]["methods"][n4d_call_data["method"]]:
+					if user in self.plugin_manager.plugins[n4d_call_data["class"]]["methods"][n4d_call_data["method"]]["allowed_users"]:
+						ok=True
+						break
 		
 			if n4d_call_data["user"]=="root" and not ok:
 				ok=True
@@ -694,6 +724,9 @@ class Core:
 		try:
 
 			n4d_call_data=self.parse_params(method,params)
+
+			if n4d_call_data["error"]!=None:
+				return n4d.responses.build_unhandled_error_response(None,n4d_call_data["error"],n4d_call_data["traceback"])
 
 			# If no exception is raised we are ok to authenticate
 			if not self.authenticate(n4d_call_data):
