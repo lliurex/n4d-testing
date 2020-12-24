@@ -687,7 +687,6 @@ class Core:
 				if "allowed_users" in self.plugin_manager.plugins[n4d_call_data["class"]]["methods"][n4d_call_data["method"]]:
 					if user in self.plugin_manager.plugins[n4d_call_data["class"]]["methods"][n4d_call_data["method"]]["allowed_users"]:
 						ok=True
-						break
 		
 			if n4d_call_data["user"]=="root" and not ok:
 				ok=True
