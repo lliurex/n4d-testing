@@ -116,7 +116,7 @@ class Core:
 	
 	def _startup_launcher(self):
 		
-		print("[CORE] Executing startups ... ")
+		self.dprint("[CORE] Executing startups ... ")
 		
 		withstartup = []
 		next_objects = []
@@ -372,7 +372,7 @@ class Core:
 		
 		if "found" in self.plugin_manager.plugins[plugin] and self.plugin_manager.plugins[plugin]["found"]:
 			if verbose:
-				self.dstdout("\t\t%s ... "%item)
+				self.dstdout("\t\t%s ... "%plugin)
 			try:
 				class_=imp.load_source(plugin,self.plugin_manager.plugins[plugin]["plugin_path"])
 				self.plugin_manager.plugins[plugin]["object"]=getattr(class_,plugin)()
@@ -385,14 +385,18 @@ class Core:
 					self.dstdout("\t\t\t[!] " + str(e)+"\n")
 				self.plugin_manager.plugins[plugin]["object"]=None
 				return False
-				
+		
+		return False
+		
 	#def _load_plugin
 	
 	def load_plugin_on_runtime(self,plugin_conf):
 
 		plugin=self.plugin_manager.read_plugin_conf(plugin_conf)
 		if plugin!=None:
-			return self._load_plugin(plugin)
+			ret=self._load_plugin(plugin,True)
+			if ret:
+				self._startup_launcher()
 
 	#def _load_plugin
 	
