@@ -163,7 +163,7 @@ class VariablesManager:
 		self.save_variables(name)
 		self.notify_changes(name,value)
 		
-		return n4d.responses.build_call_successful_response(True)
+		return n4d.responses.build_successful_call_response(True)
 			
 		
 	#def set_variable
@@ -176,9 +176,9 @@ class VariablesManager:
 					self.variables[name][key]=attr[key]
 			self.save_variables(name)
 		
-			return n4d.responses.build_call_successful_response(True,"Attributes set")
+			return n4d.responses.build_successful_call_response(True,"Attributes set")
 		
-		return n4d.responses.build_call_failed_response(None,"Variable not found",VariablesManager.VARIABLE_NOT_FOUND_ERROR)
+		return n4d.responses.build_failed_call_response(None,"Variable not found",VariablesManager.VARIABLE_NOT_FOUND_ERROR)
 		
 	#def set_attr
 	
@@ -189,9 +189,9 @@ class VariablesManager:
 				self.variables["name"].pop(key)
 				self.save_variables(name)
 			
-			return n4d.responses.build_call_successful_response(True,"Attribute deleted")
+			return n4d.responses.build_successful_call_response(True,"Attribute deleted")
 		
-		return n4d.responses.build_call_failed_response(None,"Variable not found",VariablesManager.VARIABLE_NOT_FOUND_ERROR)
+		return n4d.responses.build_failed_call_response(None,"Variable not found",VariablesManager.VARIABLE_NOT_FOUND_ERROR)
 		
 	#def delete_attr
 	
@@ -200,12 +200,12 @@ class VariablesManager:
 		if name in self.variables:
 			
 			if "root_protected" in self.variables[name] and self.variables[name]["root_protected"]:
-				return n4d.responses.build_call_failed_response(None,"Root protected variable. File is found in %s%s"%(VariablesManager.WATCH_DIR,name),VariablesManager.PROTECTED_VARIABLE_ERROR)
+				return n4d.responses.build_failed_call_response(None,"Root protected variable. File is found in %s%s"%(VariablesManager.WATCH_DIR,name),VariablesManager.PROTECTED_VARIABLE_ERROR)
 			
 			if full_description:
-				return n4d.responses.build_call_successful_response(copy.deepcopy(self.variables[name]))
+				return n4d.responses.build_successful_call_response(copy.deepcopy(self.variables[name]))
 			else:
-				return n4d.responses.build_call_successful_response(copy.deepcopy(self.variables[name]["value"]))
+				return n4d.responses.build_successful_call_response(copy.deepcopy(self.variables[name]["value"]))
 				
 		elif "REMOTE_VARIABLES_SERVER" in self.variables:
 			
@@ -219,9 +219,9 @@ class VariablesManager:
 
 				except Exception as e:
 					tback=traceback.format_exc()
-					return n4d.responses.build_call_failed_response(None,str(e),VariablesManager.REMOTE_VARIABLES_SERVER_ERROR,tback)
+					return n4d.responses.build_failed_call_response(None,str(e),VariablesManager.REMOTE_VARIABLES_SERVER_ERROR,tback)
 				
-		return n4d.responses.build_call_failed_response(None,"Variable not found",VariablesManager.VARIABLE_NOT_FOUND_ERROR)
+		return n4d.responses.build_failed_call_response(None,"Variable not found",VariablesManager.VARIABLE_NOT_FOUND_ERROR)
 		
 	#def get_variable
 	
@@ -229,14 +229,14 @@ class VariablesManager:
 	def get_variables(self,full_info=False):
 		
 		if full_info:
-			return n4d.responses.build_call_successful_response(copy.deepcopy(self.variables))
+			return n4d.responses.build_successful_call_response(copy.deepcopy(self.variables))
 		
 		ret={}
 		
 		for variable in self.variables:
 			ret[variable]=copy.deepcopy(self.variables[variable]["value"])
 		
-		return n4d.responses.build_call_successful_response(ret)
+		return n4d.responses.build_successful_call_response(ret)
 		
 	#def get_variables
 	
@@ -247,9 +247,9 @@ class VariablesManager:
 			if os.path.exists(VariablesManager.VARIABLES_DIR+name):
 				os.remove(VariablesManager.VARIABLES_DIR+name)
 				
-			return n4d.responses.build_call_successful_response(True,"Variable deleted")
+			return n4d.responses.build_successful_call_response(True,"Variable deleted")
 			
-		return n4d.responses.build_call_failed_response(None,"Variable not found",VariablesManager.VARIABLE_NOT_FOUND_ERROR)
+		return n4d.responses.build_failed_call_response(None,"Variable not found",VariablesManager.VARIABLE_NOT_FOUND_ERROR)
 		
 	#def delete_variable
 	
