@@ -400,6 +400,17 @@ class Core:
 
 	#def _load_plugin
 	
+	def unload_plugin(self,plugin_name):
+		
+		if plugin_name in self.plugin_manager.plugins:
+			self.plugin_manager.plugins.pop(plugin_name)
+			self.dprint("\t\t%s unloaded"%plugin_name)
+			return n4d.responses.build_successful_call_response(True,"Plugin unloaded")
+		
+		return n4d.responses.buid_failed_call_response(False,"Plugin not found")
+		
+	#def unload_plugin
+	
 	def parse_params(self,method,params):
 		
 		# 0 n4d_extra (dict : client_address, client_pid)
@@ -559,7 +570,7 @@ class Core:
 	
 	def key_auth(self,n4d_data):
 		#self.dprint("KEY_AUTH")
-		
+
 		if n4d_data["password"]==self.n4d_key:
 			return True
 			
@@ -586,9 +597,10 @@ class Core:
 		HUMAN_RESPONSES[USER_ALLOWED]="User allowed"
 		
 		ret=self.validate_auth(auth)
+
 		
 		if ret["status"]!=0:
-			return n4d.responses.build_failed_call_response(None,HUMAN_RESPONSES[USER_NOT_VALIDATED],USER_NOT_VALIDATED)
+			return n4d.responses.build_authentication_failed_response()
 			
 		groups=ret["return"][1]
 		group_found=False
@@ -599,7 +611,7 @@ class Core:
 				break
 				
 		if not group_found:
-			return n4d.responses.build_failed_call_response(None,HUMAN_RESPONSES[USER_NOT_ALLOWED],USER_NOT_ALLOWED)
+			return n4d.responses.build_user_not_allowed_response()
 		else:
 			return n4d.responses.build_successful_call_response(groups,HUMAN_RESPONSES[USER_ALLOWED])		
 		
@@ -636,7 +648,6 @@ class Core:
 		groups=[]
 		
 		if type(auth)==str:
-
 			auth_type="Invalid key"
 			n4d_data["password"]=auth
 			validated=self.key_auth(n4d_data)
