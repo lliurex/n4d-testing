@@ -6,9 +6,9 @@ import sys
 
 if __name__ == '__main__':
 	
-	setup(name='n4d',
+	setup(name='n4d-base',
 		version='0.900',
-		description='N4d',
+		description='N4d base library directory',
 		long_description="""""",
 		author='Hector Garcia Huerta',
 		author_email='hectorgh@gmail.com',
@@ -18,11 +18,9 @@ if __name__ == '__main__':
 		url='http://github.com/lliurex/n4d',
 		license='GPL',
 		platforms='UNIX',
-		packages = ['n4d.server','n4d.responses'],
-		package_dir = {'n4d.server':'server','n4d.responses':'responses'},
-		data_files = [('share/n4d/python-plugins/',['python-plugins/ClientManager.py']),
-				('/etc/n4d/conf.d/',['conf.d/ClientManager.json'])
-		],
+		packages = ['n4d'],
+		package_dir = {'n4d':'n4d'},
+		data_files = [],
 		classifiers=[
 			'Development Status :: 4 - Beta',
 			'Environment :: Console'
