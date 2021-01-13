@@ -31,7 +31,7 @@ Package: python3-n4d-base
 Architecture: all
 Conflicts: python3-n4d-base (<<0.902)
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, python3
-Description: Main python3 n4d package la.
-  Provides server and basic libraries la.
+Description: Main python3 n4d library.
+  Provides N4D base directory structure for extra libraries.
 
 
