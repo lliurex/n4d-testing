@@ -26,3 +26,11 @@ Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, python3, python3-pam, python3-pyinotify, python3-netifaces
 Description: Main python3 n4d package. 
   Provides server and basic libraries.
+
+Package: python3-n4d-base
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, python3
+Description: Main python3 n4d package la.
+  Provides server and basic libraries la.
+
+

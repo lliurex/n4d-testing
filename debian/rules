@@ -24,3 +24,5 @@ export PYBUILD_NAME=n4d
 
 override_dh_auto_install:
 	dh_auto_install
+	python3 setup_base.py install --root $(CURDIR)/debian/python3-n4d-base --prefix=/usr
+	python3 setup_base.py clean --all
