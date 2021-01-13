@@ -1,3 +1,15 @@
+n4d (0.901) focal; urgency=medium
+
+  * Added n4d-modules to load and unload plugins on the fly
+  * Added n4d-create-conf executable to help create conf files
+  * Added allowed_users support
+  * Added inbox support
+  * ClientManager functions to check client list
+  * Better exceptions handling
+  * Bug fixes
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Wed, 13 Jan 2021 09:39:38 +0100
+
 n4d (0.900) bionic; urgency=medium
 
   * Initial release.
