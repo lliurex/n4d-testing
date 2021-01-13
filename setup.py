@@ -18,8 +18,8 @@ if __name__ == '__main__':
 		url='http://github.com/lliurex/n4d',
 		license='GPL',
 		platforms='UNIX',
-		packages = ['n4d.server','n4d.responses'],
-		package_dir = {'n4d.server':'server','n4d.responses':'responses'},
+		packages = ['n4d','n4d.server','n4d.responses'],
+		package_dir = {'n4d.server':'server','n4d':'n4d','n4d.responses':'responses'},
 		data_files = [('share/n4d/python-plugins/',['python-plugins/ClientManager.py']),
 				('/etc/n4d/conf.d/',['conf.d/ClientManager.json'])
 		],

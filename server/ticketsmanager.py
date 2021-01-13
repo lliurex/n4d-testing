@@ -114,16 +114,10 @@ class TicketsManager:
 	def create_ticket(self,user):
 		
 		t=time.time()
-		
-		ticket_file=TicketsManager.WATCH_DIR + user
-		if os.path.exists(ticket_file):
-			f=open(ticket_file)
-			ticket=f.readline()
-			f.close()		
-			if user in self.tickets:
-				if self.tickets[user]["password"]==ticket:
-					return True
-		
+		if user in self.tickets:
+			#if self.tickets[user]["date"]+NTicketsManager.ALIVE_TIME > t:
+			return True
+
 		f=open(TicketsManager.WATCH_DIR+user,"w")
 		
 		password ="".join(random.sample(string.ascii_letters+string.digits, 50))
@@ -146,7 +140,11 @@ class TicketsManager:
 		if not os.path.exists(ticket):
 			self.create_ticket(user)
 			
-		return self.tickets[user]["password"]
+		f=open(ticket)
+		ret=f.readline()
+		f.close()
+		
+		return ret
 		
 	#def get_ticket
 
