@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+
+import xmlrpc.client
+import ssl
+import sys
+
+
+class N4dModules:
+	
+	def __init__(self,server="localhost"):
+
+		context=ssl._create_unverified_context()
+		self.client = xmlrpc.client.ServerProxy('https://%s:9779'%server,context=context,allow_none=True)
+		self.n4d_key=self.get_n4d_key()
+		if self.n4d_key == None:
+			print("You need administration privileges to run this program.")
+			sys.exit(1)
+			
+		self.actions={}
+		self.actions["load-plugin"]=self.load_plugin
+		self.actions["enable-plugin"]=self.load_plugin
+		self.actions["disable-plugin"]=self.unload_plugin
+		self.actions["unload-plugin"]=self.unload_plugin
+		
+	#def init
+	
+	def get_n4d_key(self):
+		
+		try:
+		
+			f=open("/etc/n4d/key")
+			key=f.readline().strip()
+			f.close()
+			return key
+		except:
+			return None
+		
+	#def get_n4d_key
+	
+	def load_plugin(self,plugin_conf_path):
+		
+		return self.client.load_plugin(self.n4d_key,plugin_conf_path)
+		
+	#def load_plugin
+	
+	def unload_plugin(self,plugin_name):
+		
+		return self.client.unload_plugin(self.n4d_key,plugin_name)
+		
+	#def unload_plugin
+	
+	
+	
+#class N4dModules
+
+if __name__=="__main__":
+	
+	n4dm = N4dModules()
+	print(n4dm.load_plugin("/home/cless/workspace/bionic/n4d-testing/examples/conf.d/TestPlugin.json"))
+	print(n4dm.unload_plugin("TestPlugin"))
