@@ -47,9 +47,9 @@ class PluginManager:
 
 		plugin_name=None
 		try:
-			plugin_name=item.split("/")[-1].split(".json")[0]	
+			plugin_name=file_path.split("/")[-1].split(".json")[0]	
 			self.plugins[plugin_name]={}
-			f=open(item)
+			f=open(file_path)
 			data=json.load(f)
 			f.close()
 			self.plugins[plugin_name]["setup"]=data["SETUP"]

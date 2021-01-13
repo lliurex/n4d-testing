@@ -38,8 +38,7 @@ class VariablesManager:
 		self.create_variables_dirs()
 		
 		self.load_variables()
-
-		#self.save_variables()
+		self.read_inbox()
 		
 	#def init
 	
@@ -79,13 +78,10 @@ class VariablesManager:
 	def load_variables(self):
 		
 		self.dprint("Loading variables...")
-		
-		self.variables={}
-		
 		for file_ in os.listdir(VariablesManager.VARIABLES_DIR):
+			self.dstdout("\tLoading " + file_ + " ... ")
 			try:
-				self.dstdout("\tLoading " + file_ + " ... ")
-				f=open(VariablesManager.VARIABLES_DIR+file_)	
+				f=open(os.path.join(VariablesManager.VARIABLES_DIR,file_))
 				data=json.load(f)
 				f.close()
 				self.variables[file_]=data[file_]
@@ -94,6 +90,39 @@ class VariablesManager:
 				self.dstdout("FAILED ["+str(e)+"]\n")
 	
 	#def load_variables
+	
+	def read_inbox(self):
+		
+		modified=False
+		file_list=os.listdir(VariablesManager.INBOX)
+		if len(file_list)>0:
+			self.dprint("Loading variables inbox...")
+			for file_ in file_list:
+				try:
+					self.dstdout("\tLoading " + file_ + " ... ")
+					f=open(os.path.join(VariablesManager.INBOX,file_))
+					data=json.load(f)
+					f.close()
+
+					if file_ not in self.variables:
+						self.variables[file_]=data[file_]
+						modified=True
+					else:
+						if "force_update" in data[file_]:
+							self.variables[file_]=data[file_]
+							self.dstdout("OK\n")
+							modified=True
+						else:
+							self.dstdout("SKIPPED\n")
+				except Exception as e:
+					self.dstdout("FAILED ["+str(e)+"]\n")
+							
+				os.remove(VariablesManager.INBOX+file_)
+				
+			if modified:
+				self.save_variables()
+		
+	#def read_inbox
 	
 	def save_variables(self,variable_name=None):
 		
@@ -108,14 +137,15 @@ class VariablesManager:
 			
 				tmp_vars={}
 				for item in self.variables:
-					if "volatile" in self.variables[item] and self.variables[item]["volatile"]==False:
-						tmp_vars[item]=self.variables[item]
+					if "volatile" in self.variables[item] and self.variables[item]["volatile"]:
+						continue
+					tmp_vars[item]=self.variables[item]
 						
 				for item in tmp_vars:
 					
 					tmp={}
 					tmp[item]=tmp_vars[item]
-					f=open(VariablesManager.VARIABLES_DIR+item+".sav","w")
+					f=open(VariablesManager.VARIABLES_DIR+item,"w")
 					data=json.dumps(tmp,indent=4,ensure_ascii=False)
 					f.write(data)
 					f.close()
@@ -125,7 +155,9 @@ class VariablesManager:
 							self.chmod(VariablesManager.VARIABLES_DIR+item,0600)
 					'''
 			else:
-				if variable_name in self.variables and not self.variables[variable_name]["volatile"]:
+				if variable_name in self.variables:
+					if "volatile" in self.variables[variable_name] and self.variables[variable_name]["volatile"]:
+						return True
 					var={}
 					var[variable_name]={}
 					var[variable_name]=self.variables[variable_name]

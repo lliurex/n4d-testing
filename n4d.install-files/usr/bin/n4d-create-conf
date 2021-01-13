@@ -1,0 +1,192 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import sys
+import re
+import string
+import unicodedata
+import os
+import json
+
+def strip_special_chars(s):
+	return ''.join(e for e in s if e.isalnum())
+
+
+
+DEFAULT_GROUPS_LIST=["sudo","admins"]
+
+class N4dCreateConf :
+	
+	def __init__(self,file_path,file_type):
+		
+		if file_type=="python":
+			self.create_python_conf(file_path)
+
+		if file_type=="binary":
+			self.create_binary_conf(file_path)
+		
+		if file_type=="remote":
+			self.create_remote_conf()
+		
+		
+	#def __init__
+	
+	@classmethod
+	def build_python_conf_data(self,file_name="Example.py",class_name="Example",method_list=["example_a","example_b"]):
+		
+		data={}
+		data["SETUP"]={}
+		data["METHODS"]={}
+		
+		data["SETUP"]["type"]="python"
+		data["SETUP"]["path"]=file_name
+		data["SETUP"]["class"]=class_name
+		
+		for method in method_list:
+			data["METHODS"][method]={}
+			data["METHODS"][method]["allowed_groups"]=DEFAULT_GROUPS_LIST
+		
+		return data
+		
+	#def build_python_conf_data
+	
+	@classmethod
+	def print_conf_example(self):
+			
+		data=N4dCreateConf.build_python_conf_data()
+		data["METHODS"]["example_with_protected_args"]={}
+		data["METHODS"]["example_with_protected_args"]["allowed_groups"]=DEFAULT_GROUPS_LIST
+		data["METHODS"]["example_with_protected_args"]["protected_user"]=0
+		data["METHODS"]["example_with_protected_args"]["protected_ip"]=1
+		
+		print(json.dumps(data,indent=4))
+		
+		
+	#def print_conf_example
+	
+	def create_python_conf(self,file_path):
+		
+		print("[n4d-create-conf] Reading file: " + file_path + " ... ")
+		
+		try:
+			f=open(file_path,'r')
+			file_lines=f.readlines()
+			f.close()
+		except:
+			print("[!] File not found !! [!]")
+			sys.exit(1)
+			
+		self.class_names=[]
+		self.method_names={}
+		#print file_lines
+		class_name=None
+		for line in file_lines:
+				
+			class_pattern="^class\s*\w+\s*:"
+			method_pattern="\s+def\s*\w+\s*\(\\s*\w+\s*(,{1}\s*\w+(=.*){0,1})*\s*\)\s*:"
+			#print re.search(method_pattern,line)
+			if re.search(class_pattern,line)!=None:
+				tmp=line.strip("\n")
+				class_name = tmp.split(" ")[1].strip(":")
+				self.class_names.append(class_name)
+				
+			if re.search(method_pattern,line)!=None:
+				tmp=line.strip("\n")
+				tmp=tmp.lstrip(" ")
+				method_name=tmp.split(" ")[1]
+				method_name=method_name.split("(")[0]
+				if method_name.find("__")!=0 and method_name!="startup":
+					if not class_name in self.method_names:
+						self.method_names[class_name]=[]
+					self.method_names[class_name].append(method_name)
+					
+			
+		print("[n4d-create-conf] The following classes were found:")
+			
+		count=1
+		class_list=[]
+		for item in self.method_names:
+			class_list.append(item)
+			print("\t(" + str(count) + ") " + "Class: " + item)
+			for method in self.method_names[item]:
+				print("\t\tMethod: " + method)
+			count+=1
+			
+		if len(class_list) >0 :
+			print("[n4d-create-conf] Please, select the class you want your conf file based on:")
+			ok=False
+			while(not ok):
+				try:
+					ret=input("> ")
+					selected=int(ret)-1
+					ok=True
+				except:
+					num=""
+					for i in range(0,len(count_list)):
+						num+=str(i+1) + ","
+							
+					num=num.strip(",")
+						
+					print("Please input one of the following numbers: [" + num + "]")
+				
+		else:
+			selected=0
+				
+		print("[n4d-create-conf] Creating conf file based on class "  + class_list[selected] + " ... ")
+		
+		tmp=file_path.split("/")
+		pyfile=tmp[len(tmp)-1]
+		class_name=class_list[selected]
+		methods=self.method_names[class_name]
+		
+		data=self.build_python_conf_data(pyfile,class_name,methods)
+		data=json.dumps(data,indent=4,ensure_ascii=False)
+		
+		f=open("%s.json"%class_name,"w")
+		f.write(data)
+		f.close()
+		
+		print("[n4d-create-conf] File " + os.getcwd() + "/" + class_list[selected] + ".json created!")
+		print("\t[!] You should edit group permissions to it in order to be a valid n4d conf file [!]")
+			
+	#def create_python_conf
+	
+	
+#class N4d_Create_Conf
+
+def usage():
+	
+	print("USAGE:")
+	print("\tn4d-create-conf PYTHON_PLUGIN_FILE | --example | --help")
+	
+#def usage
+
+
+
+if __name__=="__main__":
+	
+	if len(sys.argv)==1:
+		usage()
+		sys.exit(0)
+	
+	if sys.argv[1] == "--help":
+		usage()
+		sys.exit(0)
+		
+	if sys.argv[1] == "--example":
+		N4dCreateConf.print_conf_example()
+		sys.exit(0)
+		
+		
+	read=True
+	count=1
+	input_file=sys.argv[1]
+	file_type="python"
+	
+	n4d=N4dCreateConf(input_file,file_type)
+		
+	
+	
+	
+	#n4d_create_conf=N4dCreateConf("n4d-create-conf.py")
+	
