@@ -3,6 +3,6 @@ use warnings;
 use strict;
 use Debian::Debhelper::Dh_Lib;
 
-insert_after("dh_install", "dn4dh_install");
+insert_after("dh_install", "dh_n4d");
 
 1;
