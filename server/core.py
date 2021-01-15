@@ -834,4 +834,20 @@ class Core:
 		
 	#def root_set_variable
 	
+	def read_inbox(self):
+		'''
+		Wrap to variables_manager.read_inbox
+		'''
+		return self.variables_manager.read_inbox()
+		
+	#def read_inbox
+	
+	def empty_trash(self):
+		'''
+		Wrap to variables_manager.empty_trash
+		'''
+		return self.variables_manager.empty_trash()
+		
+	#def read_inbox
+	
 #class Core
