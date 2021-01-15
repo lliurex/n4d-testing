@@ -3,6 +3,7 @@ n4d (0.905) focal; urgency=medium
   * Added variable_exists built-in
   * clientmanager is now part of n4d.server
   * built-in functions now support protected_user and protected_ip
+  * Bug fixes
 
  -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 15 Jan 2021 16:30:14 +0100
 
