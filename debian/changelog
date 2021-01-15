@@ -1,3 +1,11 @@
+n4d (0.904) focal; urgency=medium
+
+  * [Raul] Added n4d-dev helper.
+  * Added n4d-vars (WIP)
+  * Added empty_trash support
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Fri, 15 Jan 2021 08:56:38 +0100
+
 n4d (0.903) focal; urgency=medium
 
   * Added python3-n4d-base package
