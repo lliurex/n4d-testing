@@ -39,27 +39,13 @@ class ClientManager:
 			print("[ClientManager] %s"%str(data))
 	#def dprint
 	
-	def register_client(self,protected_ip,mac,machine_id):
-		
-		client={}
-		client["last_check"]=int(time.time())
-		client["missed_pings"]=0
-		client["ip"]=protected_ip
-		client["mac"]=mac
-				
-		self.clients[machine_id]=client
-		self.save_clients_file()
-		#self.dprint("Client [%s] %s - %s registered"%(machine_id,mac,protected_ip))
-		
-		return n4d.responses.build_successful_call_response(self.core.id,"Client added")
-		
-	#def register_instance
-	
 	def start_register_to_server_thread(self):
 		
 		self.register_thread=threading.Thread(target=self.register_to_server)
 		self.register_thread.daemon=True
 		self.register_thread.start()
+		
+	#def start_register
 	
 	def register_to_server(self):
 		
@@ -92,6 +78,22 @@ class ClientManager:
 			time.sleep(ClientManager.REGISTER_SLEEP_TIME)
 
 	#def register_n4d_instance_to_server
+	
+	def register_client(self,protected_ip,mac,machine_id):
+		
+		client={}
+		client["last_check"]=int(time.time())
+		client["missed_pings"]=0
+		client["ip"]=protected_ip
+		client["mac"]=mac
+				
+		self.clients[machine_id]=client
+		self.save_clients_file()
+		#self.dprint("Client [%s] %s - %s registered"%(machine_id,mac,protected_ip))
+		
+		return n4d.responses.build_successful_call_response(self.core.id,"Client added")
+		
+	#def register_instance
 	
 	def save_clients_file(self):
 		

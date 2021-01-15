@@ -137,12 +137,13 @@ def build_unhandled_error_response(ret_value,ret_msg=HUMAN_RESPONSES[UNHANDLED_E
 #def build_response
 
 
-def build_successful_call_response(ret_value,ret_msg=HUMAN_RESPONSES[CALL_SUCCESSFUL]):
+def build_successful_call_response(ret_value=True,ret_msg=HUMAN_RESPONSES[CALL_SUCCESSFUL],status_code=0):
 	
 	ret={}
 	ret["msg"]=ret_msg
 	ret["status"]=CALL_SUCCESSFUL
 	ret["return"]=ret_value
+	ret["status_code"]=status_code
 	
 	return ret
 	
