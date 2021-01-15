@@ -34,4 +34,8 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, python3
 Description: Main python3 n4d library.
   Provides N4D base directory structure for extra libraries.
 
-
+Package: n4d-dev
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, perl, python3
+Description:  n4d debhelpers
+ This package contains n4d helpers for make debian package

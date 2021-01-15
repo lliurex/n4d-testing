@@ -1,0 +1,2 @@
+debhelper/dh_n4d /usr/bin
+debhelper/n4d_vars.pm /usr/share/perl5/Debian/Debhelper/Sequence/
