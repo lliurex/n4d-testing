@@ -13,11 +13,13 @@ import netifaces
 import subprocess
 import threading
 
+import n4d.responses
+
 import n4d.server.pluginmanager
 import n4d.server.pammanager
-import n4d.responses
 import n4d.server.variablesmanager
 import n4d.server.ticketsmanager
+import n4d.server.clientmanager
 
 
 UNKNOWN_CLASS=-40
@@ -97,6 +99,7 @@ class Core:
 
 	def init(self):
 		
+		self.clients_manager=n4d.server.clientmanager.ClientManager()
 		self.variables_manager=n4d.server.variablesmanager.VariablesManager()
 		self.tickets_manager=n4d.server.ticketsmanager.TicketsManager()
 		self.load_builtin_functions()
@@ -786,7 +789,8 @@ class Core:
 		'''
 		Function to help access plugins from other plugins
 		'''
-		if plugin_name in self.plugin_manager.plugins and self.plugin_manager.plugins[plugin_name]["found"]:
+		if plugin_name in self.plugin_manager.plugins and self.plugin_manager.plugins[plugin_name]["found"] and "object" in self.plugin_manager.plugins[plugin_name]:
+			
 			return self.plugin_manager.plugins[plugin_name]["object"]
 			
 		return None
