@@ -228,7 +228,7 @@ class VariablesManager:
 		
 	#def set_variable
 	
-	def set_attr(self,name,attr):
+	def set_attr(self,name,attr_dic):
 		
 		if name in self.variables:
 			for key in attr:

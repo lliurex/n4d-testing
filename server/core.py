@@ -822,6 +822,17 @@ class Core:
 		
 	#def get_variables
 	
+	def variable_exists(self,variable_name):
+		'''
+		Wrap to variables_manager.variable_exists
+		'''
+		return self.variables_managet.variable_exists(self,variable_name)
+		
+	#def variable_exists
+		
+		
+	#def variable_exists
+	
 	def set_variable(self,variable_name,value,attr=None):
 		'''
 		Wrap to variables_manager.set_variable
@@ -837,6 +848,22 @@ class Core:
 		return self.variables_manager.delete_variable(variable_name)
 		
 	#def root_set_variable
+	
+	def set_attr(self,variable_name,attr_dic):
+		'''
+		Wrap to variables_manager.set_attr
+		'''
+		return self.variables_manager.set_attr(variable_name,attr_dic)
+		
+	#def set_attr
+	
+	def delete_attr(self,variable_name,attr_key):
+		'''
+		Wrap to variables_manager.delete_attr
+		'''
+		return self.variables_manager.delete_attr(variable_name,attr_key)
+		
+	#def set_attr
 	
 	def read_inbox(self):
 		'''
