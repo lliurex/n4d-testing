@@ -39,6 +39,7 @@ class VariablesManager:
 		
 		self.load_variables()
 		self.read_inbox()
+		self.empty_trash()
 		
 	#def init
 	
@@ -122,7 +123,29 @@ class VariablesManager:
 			if modified:
 				self.save_variables()
 		
+		return n4d.responses.build_successful_call_response(True,"Inbox read")
+		
 	#def read_inbox
+	
+	def empty_trash(self):
+		
+		modified=False
+		file_list=os.listdir(VariablesManager.TRASH)
+		if len(file_list)>0:
+			self.dprint("Emptying variables trash...")
+			for file_ in file_list:
+				self.dstdout("\tEmptying " + file_ + " ... ")
+				if file_ in self.variables:
+					self.variables.pop(file_)
+					modified=True
+				os.remove(file_)
+		
+		if modified:
+			self.save_variables()
+		
+		return n4d.responses.build_successful_call_response(True,"Trash emptied")
+		
+	#def empty_trash
 	
 	def save_variables(self,variable_name=None):
 		

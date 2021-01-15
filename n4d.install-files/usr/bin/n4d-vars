@@ -1,0 +1,154 @@
+#!/usr/bin/env python3
+
+import xmlrpc.client
+import ssl
+import n4d.responses
+import sys
+
+VARIABLES_DIR="/var/lib/n4d/variables/"
+
+class N4dVars:
+	
+	def __init__(self):
+		
+		self.commands=["getvalues","listvars","setvalue","readinbox","emptytrash","createjson","help"]
+		context=ssl._create_unverified_context()
+		self.client=xmlrpc.client.ServerProxy("https://localhost:9779",context=context,allow_none=True)
+		
+	#def __init__
+
+	def usage(self):
+		
+		print("USAGE: n4d-vars OPTION [PARAMETERS]\n")
+		print("Options:")
+		print("\tgetvalues VAR1 [VAR2...VARn]")
+		print("\tlistvars")
+		print("\tcreatejson VAR1 [VAR2...VARn] [--output OUTPUTFILE]")
+		print("")
+		print("\tsetvalue VAR VALUE")
+		print("\treadinbox")
+		print("\temptytrash\n")
+		
+	#def usage
+
+	def parse_input(self,data):
+
+		if len(data) <2 :
+			self.usage()
+		else:
+			if data[1] not in self.commands:
+				self.usage()
+			else:
+				if data[1]=="getvalues":
+					if self.is_n4d_running():
+						self.getvalues(data[2:])
+					else:
+						self.offline_getvars(data[2:])
+				if data[1]=="listvars":
+					if self.is_n4d_running():
+						self.listvars()
+					else:
+						self.offline_getvars([],True)
+				if data[1]=="createjson":
+					try:
+						if "--output" in data:
+							output=data[len(data)-1]
+							vars=data[2:len(data)-2]
+						else:
+							output=None
+							vars=data[2:]
+					except:
+						self.usage()
+						sys.exit(0)
+						
+					self.createjson(vars,output)
+					
+				if data[1]=="setvalue":
+					try:
+						var=data[2]
+						value=data[3]
+					except:
+						self.usage()
+						sys.exit(0)
+					
+					self.setvalue(var,value)
+					
+				if data[1]=="readinbox":
+					self.readinbox()
+				if data[1]=="emptytrash":
+					self.emptytrash()
+				if data[1]=="help":
+					self.usage()
+		
+	#def parse_input
+
+
+
+
+	def read_key(self):
+		try:
+			f=open("/etc/n4d/key")
+			key=f.readline().strip()
+			f.close()
+			return key
+		except:
+			return None
+		
+	#def readkey
+	
+	def is_status_ok(self,ret):
+		
+		if "status" in ret and ret["status"]==n4d.responses.CALL_SUCCESSFUL:
+			return True
+
+		print("[!] Something went wrong:\n%s"%(str(ret)))
+		return False
+	
+	def get_variable(self,vname):
+		
+		ret=self.client.get_variable(vname)
+		if self.is_status_ok(ret):
+			print("%s='%s'"%(vname,str(ret["return"])))
+			return 0
+			
+		return -1
+		
+	#def get_variable
+	
+	def read_inbox(self):
+		
+		key=self.readkey()
+		if key==None:
+			print("[!] Error reading n4d key to perform the operation")
+			return -1
+			
+		ret=self.client.read_inbox(key)
+		if self.is_status_ok(ret):
+			return 0
+			
+		return -1
+		
+	#def read_inbox
+	
+	def empty_trash(self):
+		
+		key=self.readkey()
+		if key==None:
+			print("[!] Error reading n4d key to perform the operation")
+			return -1
+			
+		ret=self.client.empty_trash(key)
+		if self.is_status_ok(ret):
+			return 0
+			
+		return -1
+		
+	#def empty_trash
+
+
+
+	
+if __name__=="__main__":
+	
+	n4dvars=N4dVars()
+	n4dvars.get_variable("PABLITO")
