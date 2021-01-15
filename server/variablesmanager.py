@@ -138,7 +138,7 @@ class VariablesManager:
 				if file_ in self.variables:
 					self.variables.pop(file_)
 					modified=True
-				os.remove(file_)
+				os.remove(VariablesManager.TRASH+file_)
 		
 		if modified:
 			self.save_variables()
