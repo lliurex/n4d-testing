@@ -100,8 +100,9 @@ class Core:
 
 	def init(self):
 		
-		self.clients_manager=n4d.server.clientmanager.ClientManager()
+		#variables_manager should be first just in case
 		self.variables_manager=n4d.server.variablesmanager.VariablesManager()
+		self.clients_manager=n4d.server.clientmanager.ClientManager()
 		self.tickets_manager=n4d.server.ticketsmanager.TicketsManager()
 		self.load_builtin_functions()
 		self.load_plugins()
