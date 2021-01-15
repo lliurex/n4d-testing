@@ -83,6 +83,7 @@ class Core:
 		self.create_token()
 		
 		self.validation_history={}
+		self.builtin_protected_args={}
 		self.executed_startups=[]
 		
 		self.n4d_id_validation_errors_count=0
@@ -678,6 +679,21 @@ class Core:
 	def _dispatch_core_function(self,n4d_call_data):
 		
 		self.dprint("[%s@%s] Executing %s.%s ..."%(n4d_call_data["user"] or "anonymous",n4d_call_data["client_address"] ,n4d_call_data["class"],n4d_call_data["method"]))
+		
+		method=n4d_call_data["method"]
+		params=n4d_call_data["params"]
+		
+		if method in self.builtin_protected_args:
+			if "protected_user" in self.builtin_protected_args[method]:
+				new_params=list(n4d_call_data["params"])
+				new_params[self.builtin_protected_args[method]["protected_user"]]=n4d_call_data["user"]
+				n4d_call_data["params"]=tuple(new_params)
+				
+			if "protected_ip" in self.builtin_protected_args[method]:
+				new_params=list(n4d_call_data["params"])
+				new_params[self.builtin_protected_args[method]["protected_ip"]]=n4d_call_data["client_address"]
+				n4d_call_data["params"]=tuple(new_params)
+		
 		response=getattr(self,"builtin_"+n4d_call_data["method"])(*n4d_call_data["params"])
 		return response
 
@@ -784,6 +800,16 @@ class Core:
 	
 	# ######################  #
 	# DEVELOPER HELPER FUNCTIONS #
+	
+	def set_builtin_protected_args(self,function_name,args_dic):
+		
+		if function_name not in self.builtin_protected_args:
+			self.builtin_protected_args[function_name]={}
+			
+		for key in args_dic:
+			self.builtin_protected_args[function_name][key]=args_dic[key]
+		
+	#def
 	
 	def get_plugin(self,plugin_name):
 		'''
