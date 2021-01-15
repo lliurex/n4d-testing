@@ -686,14 +686,16 @@ class Core:
 		
 		if method in self.builtin_protected_args:
 			if "protected_user" in self.builtin_protected_args[method]:
-				new_params=list(n4d_call_data["params"])
-				new_params[self.builtin_protected_args[method]["protected_user"]]=n4d_call_data["user"]
-				n4d_call_data["params"]=tuple(new_params)
+				if len(n4d_call_data["params"]) > self.builtin_protected_args[method]["protected_user"]:
+					new_params=list(n4d_call_data["params"])
+					new_params[self.builtin_protected_args[method]["protected_user"]]=n4d_call_data["user"]
+					n4d_call_data["params"]=tuple(new_params)
 				
 			if "protected_ip" in self.builtin_protected_args[method]:
-				new_params=list(n4d_call_data["params"])
-				new_params[self.builtin_protected_args[method]["protected_ip"]]=n4d_call_data["client_address"]
-				n4d_call_data["params"]=tuple(new_params)
+				if len(n4d_call_data["params"]) > self.builtin_protected_args[method]["protected_ip"]:
+					new_params=list(n4d_call_data["params"])
+					new_params[self.builtin_protected_args[method]["protected_ip"]]=n4d_call_data["client_address"]
+					n4d_call_data["params"]=tuple(new_params)
 		
 		response=getattr(self,"builtin_"+n4d_call_data["method"])(*n4d_call_data["params"])
 		return response
@@ -701,7 +703,6 @@ class Core:
 	#def _dispatch_core_function
 	
 	def _dispatch_plugin_function(self,n4d_call_data):
-		
 		
 		if n4d_call_data["method"] in self.plugin_manager.plugins[n4d_call_data["class"]]["methods"]:
 
@@ -731,14 +732,16 @@ class Core:
 				method=n4d_call_data["method"]
 				
 				if "protected_user" in self.plugin_manager.plugins[class_]["methods"][method]:
-					new_params=list(n4d_call_data["params"])
-					new_params[self.plugin_manager.plugins[class_]["methods"][method]["protected_user"]]=n4d_call_data["user"]
-					n4d_call_data["params"]=tuple(new_params)
+					if len(n4d_call_data["params"]) > self.plugin_manager.plugins[class_]["methods"][method]["protected_user"]:
+						new_params=list(n4d_call_data["params"])
+						new_params[self.plugin_manager.plugins[class_]["methods"][method]["protected_user"]]=n4d_call_data["user"]
+						n4d_call_data["params"]=tuple(new_params)
 				
 				if "protected_ip" in self.plugin_manager.plugins[class_]["methods"][method]:
-					new_params=list(n4d_call_data["params"])
-					new_params[self.plugin_manager.plugins[class_]["methods"][method]["protected_ip"]]=n4d_call_data["client_address"]
-					n4d_call_data["params"]=tuple(new_params)
+					if len(n4d_call_data["params"]) > self.plugin_manager.plugins[class_]["methods"][method]["protected_ip"]:
+						new_params=list(n4d_call_data["params"])
+						new_params[self.plugin_manager.plugins[class_]["methods"][method]["protected_ip"]]=n4d_call_data["client_address"]
+						n4d_call_data["params"]=tuple(new_params)
 				
 				self.dprint("%s@%s calling %s.%s ..."%(n4d_call_data["user"],n4d_call_data["client_address"],n4d_call_data["class"],n4d_call_data["method"]))
 				response=getattr(self.plugin_manager.plugins[n4d_call_data["class"]]["object"],n4d_call_data["method"])(*n4d_call_data["params"])
