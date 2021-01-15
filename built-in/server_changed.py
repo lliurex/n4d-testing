@@ -6,7 +6,7 @@ def server_changed(self,n4d_id,variable_name,value):
 
 	UNKNOWN_N4D_ID=-5
 	
-	if n4d_id == self.plugin_manager.plugins["ClientManager"]["object"].server_id:
+	if n4d_id == self.clients_manager.server_id:
 		self.n4d_id_validation_errors_count=0
 		if variable_name in self.variables_manager.triggers:
 			self.dprint("N4D ID validated. Executing triggers for %s ..."%variable_name)

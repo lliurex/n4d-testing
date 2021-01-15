@@ -221,7 +221,8 @@ class VariablesManager:
 			self.set_attr(name,attr)
 		
 		self.save_variables(name)
-		self.notify_changes(name,value)
+		if name in self.triggers:
+			self.notify_changes(name,value)
 		
 		return n4d.responses.build_successful_call_response(True)
 			
@@ -235,7 +236,7 @@ class VariablesManager:
 				if key!="value":
 					self.variables[name][key]=attr[key]
 			self.save_variables(name)
-		
+
 			return n4d.responses.build_successful_call_response(True,"Attributes set")
 		
 		return n4d.responses.build_failed_call_response(None,"Variable not found",VariablesManager.VARIABLE_NOT_FOUND_ERROR)
