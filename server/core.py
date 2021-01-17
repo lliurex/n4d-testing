@@ -13,11 +13,13 @@ import netifaces
 import subprocess
 import threading
 
+import n4d.responses
+
 import n4d.server.pluginmanager
 import n4d.server.pammanager
-import n4d.responses
 import n4d.server.variablesmanager
 import n4d.server.ticketsmanager
+import n4d.server.clientmanager
 
 
 UNKNOWN_CLASS=-40
@@ -81,6 +83,7 @@ class Core:
 		self.create_token()
 		
 		self.validation_history={}
+		self.builtin_protected_args={}
 		self.executed_startups=[]
 		
 		self.n4d_id_validation_errors_count=0
@@ -97,7 +100,9 @@ class Core:
 
 	def init(self):
 		
+		#variables_manager should be first just in case
 		self.variables_manager=n4d.server.variablesmanager.VariablesManager()
+		self.clients_manager=n4d.server.clientmanager.ClientManager()
 		self.tickets_manager=n4d.server.ticketsmanager.TicketsManager()
 		self.load_builtin_functions()
 		self.load_plugins()
@@ -675,13 +680,29 @@ class Core:
 	def _dispatch_core_function(self,n4d_call_data):
 		
 		self.dprint("[%s@%s] Executing %s.%s ..."%(n4d_call_data["user"] or "anonymous",n4d_call_data["client_address"] ,n4d_call_data["class"],n4d_call_data["method"]))
+		
+		method=n4d_call_data["method"]
+		params=n4d_call_data["params"]
+		
+		if method in self.builtin_protected_args:
+			if "protected_user" in self.builtin_protected_args[method]:
+				if len(n4d_call_data["params"]) > self.builtin_protected_args[method]["protected_user"]:
+					new_params=list(n4d_call_data["params"])
+					new_params[self.builtin_protected_args[method]["protected_user"]]=n4d_call_data["user"]
+					n4d_call_data["params"]=tuple(new_params)
+				
+			if "protected_ip" in self.builtin_protected_args[method]:
+				if len(n4d_call_data["params"]) > self.builtin_protected_args[method]["protected_ip"]:
+					new_params=list(n4d_call_data["params"])
+					new_params[self.builtin_protected_args[method]["protected_ip"]]=n4d_call_data["client_address"]
+					n4d_call_data["params"]=tuple(new_params)
+		
 		response=getattr(self,"builtin_"+n4d_call_data["method"])(*n4d_call_data["params"])
 		return response
 
 	#def _dispatch_core_function
 	
 	def _dispatch_plugin_function(self,n4d_call_data):
-		
 		
 		if n4d_call_data["method"] in self.plugin_manager.plugins[n4d_call_data["class"]]["methods"]:
 
@@ -711,14 +732,16 @@ class Core:
 				method=n4d_call_data["method"]
 				
 				if "protected_user" in self.plugin_manager.plugins[class_]["methods"][method]:
-					new_params=list(n4d_call_data["params"])
-					new_params[self.plugin_manager.plugins[class_]["methods"][method]["protected_user"]]=n4d_call_data["user"]
-					n4d_call_data["params"]=tuple(new_params)
+					if len(n4d_call_data["params"]) > self.plugin_manager.plugins[class_]["methods"][method]["protected_user"]:
+						new_params=list(n4d_call_data["params"])
+						new_params[self.plugin_manager.plugins[class_]["methods"][method]["protected_user"]]=n4d_call_data["user"]
+						n4d_call_data["params"]=tuple(new_params)
 				
 				if "protected_ip" in self.plugin_manager.plugins[class_]["methods"][method]:
-					new_params=list(n4d_call_data["params"])
-					new_params[self.plugin_manager.plugins[class_]["methods"][method]["protected_ip"]]=n4d_call_data["client_address"]
-					n4d_call_data["params"]=tuple(new_params)
+					if len(n4d_call_data["params"]) > self.plugin_manager.plugins[class_]["methods"][method]["protected_ip"]:
+						new_params=list(n4d_call_data["params"])
+						new_params[self.plugin_manager.plugins[class_]["methods"][method]["protected_ip"]]=n4d_call_data["client_address"]
+						n4d_call_data["params"]=tuple(new_params)
 				
 				self.dprint("%s@%s calling %s.%s ..."%(n4d_call_data["user"],n4d_call_data["client_address"],n4d_call_data["class"],n4d_call_data["method"]))
 				response=getattr(self.plugin_manager.plugins[n4d_call_data["class"]]["object"],n4d_call_data["method"])(*n4d_call_data["params"])
@@ -782,11 +805,22 @@ class Core:
 	# ######################  #
 	# DEVELOPER HELPER FUNCTIONS #
 	
+	def set_builtin_protected_args(self,function_name,args_dic):
+		
+		if function_name not in self.builtin_protected_args:
+			self.builtin_protected_args[function_name]={}
+			
+		for key in args_dic:
+			self.builtin_protected_args[function_name][key]=args_dic[key]
+		
+	#def
+	
 	def get_plugin(self,plugin_name):
 		'''
 		Function to help access plugins from other plugins
 		'''
-		if plugin_name in self.plugin_manager.plugins and self.plugin_manager.plugins[plugin_name]["found"]:
+		if plugin_name in self.plugin_manager.plugins and self.plugin_manager.plugins[plugin_name]["found"] and "object" in self.plugin_manager.plugins[plugin_name]:
+			
 			return self.plugin_manager.plugins[plugin_name]["object"]
 			
 		return None
@@ -818,6 +852,17 @@ class Core:
 		
 	#def get_variables
 	
+	def variable_exists(self,variable_name):
+		'''
+		Wrap to variables_manager.variable_exists
+		'''
+		return self.variables_managet.variable_exists(self,variable_name)
+		
+	#def variable_exists
+		
+		
+	#def variable_exists
+	
 	def set_variable(self,variable_name,value,attr=None):
 		'''
 		Wrap to variables_manager.set_variable
@@ -833,5 +878,37 @@ class Core:
 		return self.variables_manager.delete_variable(variable_name)
 		
 	#def root_set_variable
+	
+	def set_attr(self,variable_name,attr_dic):
+		'''
+		Wrap to variables_manager.set_attr
+		'''
+		return self.variables_manager.set_attr(variable_name,attr_dic)
+		
+	#def set_attr
+	
+	def delete_attr(self,variable_name,attr_key):
+		'''
+		Wrap to variables_manager.delete_attr
+		'''
+		return self.variables_manager.delete_attr(variable_name,attr_key)
+		
+	#def set_attr
+	
+	def read_inbox(self):
+		'''
+		Wrap to variables_manager.read_inbox
+		'''
+		return self.variables_manager.read_inbox()
+		
+	#def read_inbox
+	
+	def empty_trash(self):
+		'''
+		Wrap to variables_manager.empty_trash
+		'''
+		return self.variables_manager.empty_trash()
+		
+	#def read_inbox
 	
 #class Core

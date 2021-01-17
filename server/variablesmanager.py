@@ -39,6 +39,7 @@ class VariablesManager:
 		
 		self.load_variables()
 		self.read_inbox()
+		self.empty_trash()
 		
 	#def init
 	
@@ -122,7 +123,29 @@ class VariablesManager:
 			if modified:
 				self.save_variables()
 		
+		return n4d.responses.build_successful_call_response(True,"Inbox read")
+		
 	#def read_inbox
+	
+	def empty_trash(self):
+		
+		modified=False
+		file_list=os.listdir(VariablesManager.TRASH)
+		if len(file_list)>0:
+			self.dprint("Emptying variables trash...")
+			for file_ in file_list:
+				self.dstdout("\tEmptying " + file_ + " ... ")
+				if file_ in self.variables:
+					self.variables.pop(file_)
+					modified=True
+				os.remove(VariablesManager.TRASH+file_)
+		
+		if modified:
+			self.save_variables()
+		
+		return n4d.responses.build_successful_call_response(True,"Trash emptied")
+		
+	#def empty_trash
 	
 	def save_variables(self,variable_name=None):
 		
@@ -176,6 +199,13 @@ class VariablesManager:
 			return False
 		
 	#def save_variables
+	
+	def variable_exists(self,vname):
+		
+		value=vname in self.variables
+		return n4d.responses.build_successful_call_response(value)
+		
+	#def variable_exists
 			
 	def set_variable(self,name,value,attr=None):
 		
@@ -188,26 +218,25 @@ class VariablesManager:
 		self.variables[name]["value"]=value
 		
 		if type(attr)==dict:
-			for key in attr:
-				if key != "value":
-					self.variables[name][key]=attr[key]
+			self.set_attr(name,attr)
 		
 		self.save_variables(name)
-		self.notify_changes(name,value)
+		if name in self.triggers:
+			self.notify_changes(name,value)
 		
 		return n4d.responses.build_successful_call_response(True)
 			
 		
 	#def set_variable
 	
-	def set_attr(self,name,attr):
+	def set_attr(self,name,attr_dic):
 		
 		if name in self.variables:
 			for key in attr:
 				if key!="value":
 					self.variables[name][key]=attr[key]
 			self.save_variables(name)
-		
+
 			return n4d.responses.build_successful_call_response(True,"Attributes set")
 		
 		return n4d.responses.build_failed_call_response(None,"Variable not found",VariablesManager.VARIABLE_NOT_FOUND_ERROR)
@@ -295,10 +324,7 @@ class VariablesManager:
 	
 	def _notify_changes(self,variable_name,value):
 		
-		cm=self.core.get_plugin("ClientManager")
-		if cm==None:
-			return False
-			
+		cm=self.core.clients_manager
 		for client in cm.clients:
 			try:
 				#self.dprint("Notifying %s changes to %s..."%(variable_name,cm.clients[client]["ip"]))
