@@ -1,2 +1,4 @@
 /etc/n4d/one-shot
 /etc/n4d/cert
+/usr/share/n4d/python-plugins
+/etc/n4d/conf.d
