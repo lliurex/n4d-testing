@@ -18,8 +18,8 @@ if __name__ == '__main__':
 		url='http://github.com/lliurex/n4d',
 		license='GPL',
 		platforms='UNIX',
-		packages = ['n4d.server','n4d.responses'],
-		package_dir = {'n4d.server':'server','n4d.responses':'responses'},
+		packages = ['n4d.server','n4d.responses', 'n4d.utils'],
+		package_dir = {'n4d.server':'server','n4d.responses':'responses','n4d.utils':'utils'},
 		data_files = [],
 		classifiers=[
 			'Development Status :: 4 - Beta',
