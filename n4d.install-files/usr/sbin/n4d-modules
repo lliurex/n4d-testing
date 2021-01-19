@@ -49,12 +49,40 @@ class N4dModules:
 		
 	#def unload_plugin
 	
-	
+	def usage(self):
+		
+		print("USAGE:")
+		print("n4d-modules load-plugin | enable PLUGIN_CONF_FILE")
+		print("n4d-modules unload-plugin | disable-plugin PLUGIN_NAME")
+		
+	#def usage
 	
 #class N4dModules
 
 if __name__=="__main__":
 	
 	n4dm = N4dModules()
-	print(n4dm.load_plugin("/home/cless/workspace/bionic/n4d-testing/examples/conf.d/TestPlugin.json"))
-	print(n4dm.unload_plugin("TestPlugin"))
+	
+	if len(sys.argv)!=3:
+		self.n4dm.usage()
+		sys.exit(0)
+	
+	if sys.argv[1] not in self.actions:
+		self.n4dm.usage()
+		sys.exit(0)
+		
+	if not os.path.exists(sys.argv[2]):
+		print("Plugin configuration file not found [!]")
+		sys.exit(0)
+		
+	if sys.argv[1] in ["load-plugin","enable-plugin"]:
+		ret=n4dm.load_plugin(sys.argv[2])
+		
+	if sys.argv[1] in ["unload-plugin","disable-plugin"]:
+		ret=n4dm.unload_plugin(sys.argv[2])
+		
+	if ret["status"]==0:
+		sys.exit(0)
+	else:
+		print("Error: [%s] %s"%(ret["error_code"],ret["msg"]))
+	

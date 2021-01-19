@@ -107,23 +107,25 @@ class VariablesManager:
 
 					for key in data:
 						if "value" not in data[key]:
+							self.dstdout("SKIPPED\n")
 							continue
 						if key not in self.variables:
+							self.variables[key]=data[key]
+							if "volatile" not in self.variables[key]:
+								self.variables[key]["volatile"]=False
+							if "force_update" not in self.variables[key]:
+								self.variables[key]["force_update"]=False
+							modified=True
+							self.dstdout("OK\n")
+						else:
+							if "force_update" in data[key] and data:
 								self.variables[key]=data[key]
 								if "volatile" not in self.variables[key]:
 									self.variables[key]["volatile"]=False
 								if "force_update" not in self.variables[key]:
 									self.variables[key]["force_update"]=False
 								modified=True
-						else:
-							if "force_update" in data[file_]:
-								self.variables[file_]=data[file_]
 								self.dstdout("OK\n")
-								if "volatile" not in self.variables[key]:
-									self.variables[key]["volatile"]=False
-								if "force_update" not in self.variables[key]:
-									self.variables[key]["force_update"]=False
-								modified=True
 							else:
 								self.dstdout("SKIPPED\n")
 				except Exception as e:
