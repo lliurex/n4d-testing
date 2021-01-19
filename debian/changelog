@@ -1,3 +1,10 @@
+n4d (0.907) focal; urgency=medium
+
+  * bug fixes in read_inbox
+  * n4d-modules cli should be functional
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Tue, 19 Jan 2021 13:45:39 +0100
+
 n4d (0.906) focal; urgency=medium
 
   * [Raul] Added n4d.utils
