@@ -105,16 +105,27 @@ class VariablesManager:
 					data=json.load(f)
 					f.close()
 
-					if file_ not in self.variables:
-						self.variables[file_]=data[file_]
-						modified=True
-					else:
-						if "force_update" in data[file_]:
-							self.variables[file_]=data[file_]
-							self.dstdout("OK\n")
-							modified=True
+					for key in data:
+						if "value" not in data[key]:
+							continue
+						if key not in self.variables:
+								self.variables[key]=data[key]
+								if "volatile" not in self.variables[key]:
+									self.variables[key]["volatile"]=False
+								if "force_update" not in self.variables[key]:
+									self.variables[key]["force_update"]=False
+								modified=True
 						else:
-							self.dstdout("SKIPPED\n")
+							if "force_update" in data[file_]:
+								self.variables[file_]=data[file_]
+								self.dstdout("OK\n")
+								if "volatile" not in self.variables[key]:
+									self.variables[key]["volatile"]=False
+								if "force_update" not in self.variables[key]:
+									self.variables[key]["force_update"]=False
+								modified=True
+							else:
+								self.dstdout("SKIPPED\n")
 				except Exception as e:
 					self.dstdout("FAILED ["+str(e)+"]\n")
 							
