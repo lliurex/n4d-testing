@@ -1,4 +1,4 @@
-n4d (0.909) UNRELEASED; urgency=medium
+n4d (0.909) focal; urgency=medium
 
   * Adding get_variables_list function
   * n4d-vars cli ready 
