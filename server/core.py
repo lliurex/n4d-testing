@@ -714,6 +714,7 @@ class Core:
 	
 	def _dispatch_plugin_function(self,n4d_call_data):
 		
+		
 		if n4d_call_data["method"] in self.plugin_manager.plugins[n4d_call_data["class"]]["methods"]:
 
 			groups=[]
@@ -787,7 +788,7 @@ class Core:
 				response=self._dispatch_core_function(n4d_call_data)
 			else:
 				# a valid plugin plugin
-				if n4d_call_data["class"] in self.plugin_manager.plugins:
+				if n4d_call_data["class"] in self.plugin_manager.plugins and self.plugin_manager.plugins[n4d_call_data["class"]]["found"]:
 					response=self._dispatch_plugin_function(n4d_call_data)
 				else:
 					response=n4d.responses.build_unknown_class_response()
