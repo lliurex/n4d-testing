@@ -298,6 +298,18 @@ class VariablesManager:
 		
 	#def get_variable
 	
+	def get_variable_list(self,variable_list=[],full_info=False):
+	
+		ret={}
+		
+		for variable in variable_list:
+			tmp=self.get_variable(variable,full_info)
+			if tmp["status"]==0:
+				ret[variable]=tmp["return"]
+		
+		return n4d.responses.build_successful_call_response(ret)
+	
+	#def get_variable_list
 	
 	def get_variables(self,full_info=False):
 		

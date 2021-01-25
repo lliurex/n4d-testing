@@ -869,6 +869,12 @@ class Core:
 		
 	#def get_variables
 	
+	def get_variable_list(self,variable_list,full_info=False):
+		
+		return self.variables_manager.get_variable_list(variable_list,full_info)
+		
+	#def get_variable_list
+	
 	def variable_exists(self,variable_name):
 		'''
 		Wrap to variables_manager.variable_exists
