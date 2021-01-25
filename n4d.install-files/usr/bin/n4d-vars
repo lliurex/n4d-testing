@@ -30,7 +30,18 @@ class N4dVars:
 		print("\temptytrash\n")
 		
 	#def usage
-
+	
+	def is_n4d_running(self):
+		
+		try:
+			self.client.get_methods()
+			return True
+		except:
+			return False
+		
+	#def is_n4d_running
+	
+	
 	def parse_input(self,data):
 
 		if len(data) <2 :
@@ -41,7 +52,7 @@ class N4dVars:
 			else:
 				if data[1]=="getvalues":
 					if self.is_n4d_running():
-						self.getvalues(data[2:])
+						self.get_variable(data[2:])
 					else:
 						self.offline_getvars(data[2:])
 				if data[1]=="listvars":
@@ -82,9 +93,6 @@ class N4dVars:
 		
 	#def parse_input
 
-
-
-
 	def read_key(self):
 		try:
 			f=open("/etc/n4d/key")
@@ -104,12 +112,14 @@ class N4dVars:
 		print("[!] Something went wrong:\n%s"%(str(ret)))
 		return False
 	
-	def get_variable(self,vname):
+	def get_variable(self,vname_list):
 		
-		ret=self.client.get_variable(vname)
-		if self.is_status_ok(ret):
-			print("%s='%s'"%(vname,str(ret["return"])))
-			return 0
+		for vname in vname_list:
+			ret=self.client.get_variable(vname)
+			if self.is_status_ok(ret):
+				print("%s='%s'"%(vname,str(ret["return"])))
+			
+			
 			
 		return -1
 		
@@ -146,8 +156,74 @@ class N4dVars:
 	#def empty_trash
 
 
+	def createjson(self,vars,output=None):
+		
+		print("* Creating json file based on variables" + str(vars) + " ...")
+		package_info=str(raw_input("* Enter package name: "))
 
+		ok=False
+		dic={}
+			
+
+		for var in vars:
+			ok=False
+			dic[var]={}
+			print("* ["+var+"] info...")
+			while not ok:
+
+
+				print("* ["+var+"] Dependency type:" )
+				print("\t[1] Initialization dependency")
+				print("\t[2] Read dependency")
+				ret=(str(raw_input("> ")))	
+				
+				if ret=="1":
+					ok=True
+					dic[var]["packages"]=[]
+					dic[var]["packages"].append(package_info)
+					dic[var]["value"]=None
+					dic[var]["description"]=raw_input("* ["+var+"] Enter variable description: ").decode("utf-8")
+					default_function="lliurex.variables."+var.lower()+".init"
+					readline.set_startup_hook(lambda: readline.insert_text(default_function)) 
+					dic[var]["function"]=str(raw_input("* ["+var+"] Enter initialization function name: "))
+					readline.set_startup_hook(None)
+
+					
+				if ret=="2":
+					ok=True
+					dic[var]["packages"]=[]
+					dic[var]["packages"].append(package_info)
+				
+				if not ok:
+					print("[!] Please enter 1 or 2")
+				
+		if output==None:
+			print("\n# Copy and paste this into your n4d variables file:")
+			data=unicode(json.dumps(dic,indent=4,encoding="utf-8",ensure_ascii=False)).encode("utf-8")
+			print("\n"+str(data)+"\n")
+		else:
+			print("* Writting file " + output + " ...")
+			f=open(output,"w")
+			data=unicode(json.dumps(dic,indent=4,encoding="utf-8",ensure_ascii=False)).encode("utf-8")
+			f.write(str(data))
+			f.close()
+			print("* Done!")
+			
+		
+	#def createjson
+	
+	def listvars(self):
+		
+		ret=self.client.get_variables()
+		if ret["status"]==0:
+			for vname in ret["return"]:
+				value=ret["return"][vname]
+				print("%s='%s'"%(vname,value))
+		
+	#def listvars
 	
 if __name__=="__main__":
 	
 	n4dvars=N4dVars()
+	n4dvars.parse_input(sys.argv)
+	
