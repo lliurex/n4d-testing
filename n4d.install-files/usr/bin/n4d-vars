@@ -82,7 +82,7 @@ class N4dVars:
 						self.usage()
 						sys.exit(0)
 					
-					self.setvalue(var,value)
+					self.set_value(var,value)
 					
 				if data[1]=="readinbox":
 					self.readinbox()
