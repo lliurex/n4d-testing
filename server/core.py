@@ -355,8 +355,10 @@ class Core:
 	def load_builtin_functions(self):
 
 		self.dprint("Sourcing built-in functions ...")
-		for f in glob.glob(Core.BUILTIN_FUNCTIONS_PATH+"*.py"):
+		for f in glob.glob(Core.BUILTIN_FUNCTIONS_PATH+"**",recursive=True):
 			try:
+				if not os.path.isfile(f):
+					continue
 				f_name=f.replace(Core.BUILTIN_FUNCTIONS_PATH,"")
 				f_name=f_name.strip(".py")
 				self.dstdout("\t\t%s ... "%f_name)
