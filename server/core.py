@@ -413,6 +413,9 @@ class Core:
 			ret=self._load_plugin(plugin,True)
 			if ret:
 				self._startup_launcher()
+				return ret
+				
+		return False
 
 	#def _load_plugin
 	
