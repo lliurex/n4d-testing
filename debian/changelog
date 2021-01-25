@@ -1,9 +1,10 @@
-n4d (0.908) UNRELEASED; urgency=medium
+n4d (0.908) focal; urgency=medium
 
   * Built-in subdirectory support
   * fixed missing import in n4d-modules
   * fixed variable_exists bug
   * Added more checks to validate if a class is loaded or not
+  * Exporting clientmanager functions via built-ins
 
  -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 25 Jan 2021 10:35:43 +0100
 
