@@ -866,7 +866,7 @@ class Core:
 		'''
 		Wrap to variables_manager.variable_exists
 		'''
-		return self.variables_manager.variable_exists(self,variable_name)
+		return self.variables_manager.variable_exists(variable_name)
 		
 	#def variable_exists
 		
