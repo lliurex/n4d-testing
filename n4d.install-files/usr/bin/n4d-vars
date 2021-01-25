@@ -104,26 +104,32 @@ class N4dVars:
 		
 	#def readkey
 	
-	def is_status_ok(self,ret):
+	def is_status_ok(self,ret,silent=True):
 		
 		if "status" in ret and ret["status"]==n4d.responses.CALL_SUCCESSFUL:
 			return True
 
-		print("[!] Something went wrong:\n%s"%(str(ret)))
+		if not silent:
+			print("[!] Something went wrong:\n%s"%(str(ret)))
 		return False
+		
 	
 	def get_variable(self,vname_list):
 		
 		for vname in vname_list:
 			ret=self.client.get_variable(vname)
-			if self.is_status_ok(ret):
+			if self.is_status_ok(ret,silent=True):
 				print("%s='%s'"%(vname,str(ret["return"])))
-			
-			
 			
 		return -1
 		
 	#def get_variable
+	
+	def set_value(self,vname,value):
+		
+		print("set_value function not ready yet")
+		
+	#def 
 	
 	def read_inbox(self):
 		
@@ -187,7 +193,6 @@ class N4dVars:
 					readline.set_startup_hook(lambda: readline.insert_text(default_function)) 
 					dic[var]["function"]=str(raw_input("* ["+var+"] Enter initialization function name: "))
 					readline.set_startup_hook(None)
-
 					
 				if ret=="2":
 					ok=True
@@ -208,7 +213,6 @@ class N4dVars:
 			f.write(str(data))
 			f.close()
 			print("* Done!")
-			
 		
 	#def createjson
 	
