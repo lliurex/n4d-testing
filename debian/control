@@ -8,6 +8,7 @@ Build-Depends: debhelper (>=10),
 	       python3-all,
 	       python3-netifaces,
 	       python3-pyinotify,
+               python3-pkg-resources,
 	       python3-pam
 Standards-Version: 4.1.2
 Homepage: http://lliurex.net
@@ -23,7 +24,7 @@ Description: Pluggable XMLRPC Server
 
 Package: python3-n4d
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, python3, python3-pam, python3-pyinotify, python3-netifaces, python3-n4d-base
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python3:Depends}, python3, python3-pam, python3-pyinotify, python3-netifaces, python3-n4d-base, python3-pkg-resources
 Description: Main python3 n4d package. 
   Provides server and basic libraries.
 
