@@ -1,6 +1,7 @@
 n4d (0.908) UNRELEASED; urgency=medium
 
   * Built-in subdirectory support
+  * fixed missing import in n4d-modules
 
  -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 25 Jan 2021 10:35:43 +0100
 
