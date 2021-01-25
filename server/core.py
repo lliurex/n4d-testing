@@ -871,8 +871,6 @@ class Core:
 		
 	#def variable_exists
 		
-		
-	#def variable_exists
 	
 	def set_variable(self,variable_name,value,attr=None):
 		'''
@@ -921,5 +919,23 @@ class Core:
 		return self.variables_manager.empty_trash()
 		
 	#def read_inbox
+	
+	def get_client_list(self,force_check=False):
+		
+		return self.clients_manager.get_client_list(foce_check)
+		
+	#def get_client_list
+	
+	def check_clients(self,wait_for_response=False):
+		
+		return self.clients_manager.check_clients(wait_for_response)
+		
+	#def get_client_list
+	
+	def check_client(self,machine_id):
+		
+		return self.clients_manager.check_client(machine_id)
+		
+	#def get_client_list
 	
 #class Core
