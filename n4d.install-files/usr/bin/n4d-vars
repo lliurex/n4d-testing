@@ -151,4 +151,3 @@ class N4dVars:
 if __name__=="__main__":
 	
 	n4dvars=N4dVars()
-	n4dvars.get_variable("PABLITO")
