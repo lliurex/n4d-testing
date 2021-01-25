@@ -493,14 +493,19 @@ class Core:
 				n4d_call_data["class"]="Core"
 				n4d_call_data["params"]=tuple(params[1:])
 			else:
-				n4d_call_data["user"],n4d_call_data["password"],n4d_call_data["auth_type"]=_auth_parsing(params[1])
-				n4d_call_data["class"]=params[2]
-				n4d_call_data["params"]=tuple(params[3:])
-				_verify_params(n4d_call_data)
+				if len(params)>1:
+					n4d_call_data["user"],n4d_call_data["password"],n4d_call_data["auth_type"]=_auth_parsing(params[1])
+					n4d_call_data["class"]=params[2]
+					n4d_call_data["params"]=tuple(params[3:])
+					_verify_params(n4d_call_data)
+				else:
+					n4d_call_data["error"]="Unknown built-in method and/or class"
+					n4d_call_data["traceback"]="Not enough arguments to parse a standard n4d call"
 				
 			return n4d_call_data
 			
 		except Exception as e:
+			print(e)
 			n4d_call_data["error"]=str(e)
 			tback=traceback.format_exc()
 			n4d_call_data["traceback"]=tback
@@ -863,6 +868,12 @@ class Core:
 		return self.variables_manager.get_variables(full_info)
 		
 	#def get_variables
+	
+	def get_variable_list(self,variable_list,full_info=False):
+		
+		return self.variables_manager.get_variable_list(variable_list,full_info)
+		
+	#def get_variable_list
 	
 	def variable_exists(self,variable_name):
 		'''
