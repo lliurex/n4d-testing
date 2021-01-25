@@ -1,3 +1,10 @@
+n4d (0.909) UNRELEASED; urgency=medium
+
+  * Adding get_variables_list function
+  * n4d-vars cli ready 
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 25 Jan 2021 14:12:11 +0100
+
 n4d (0.908) focal; urgency=medium
 
   * Built-in subdirectory support
