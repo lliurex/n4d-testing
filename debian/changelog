@@ -1,3 +1,9 @@
+n4d (0.908) UNRELEASED; urgency=medium
+
+  * Built-in subdirectory support
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 25 Jan 2021 10:35:43 +0100
+
 n4d (0.907) focal; urgency=medium
 
   * bug fixes in read_inbox
