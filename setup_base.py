@@ -7,7 +7,7 @@ import sys
 if __name__ == '__main__':
 	
 	setup(name='n4d-base',
-		version='0.900',
+		version='0.908',
 		description='N4d base library directory',
 		long_description="""""",
 		author='Hector Garcia Huerta',
