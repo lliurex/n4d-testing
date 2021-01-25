@@ -10,6 +10,7 @@ import glob
 import pyinotify
 from pyinotify import WatchManager, Notifier, ThreadedNotifier, EventsCodes, ProcessEvent
 
+import n4d.server.core
 
 
 class TicketsManager:
@@ -20,6 +21,8 @@ class TicketsManager:
 	DEBUG=True
 	
 	def __init__(self):
+		
+		self.core=n4d.server.core.Core.get_core()
 		
 		self.tickets={}
 		self.validation_errors={}
@@ -35,8 +38,7 @@ class TicketsManager:
 	
 	def dprint(self,data):
 		
-		if TicketsManager.DEBUG:
-			print("[TicketsManager] %s"%str(data))
+		self.core.pprint("TicketsManager","%s"%str(data))
 		
 	#def dprint
 	

@@ -16,8 +16,7 @@ class PluginManager:
 	
 	def dprint(self,data):
 		
-		if self.core.DEBUG:
-			print("[PluginManager] %s"%data)
+		self.core.pprint("PluginManager","%s"%data)
 		
 	#def dprint
 	

@@ -45,8 +45,7 @@ class VariablesManager:
 	
 	def dprint(self,data):
 		
-		if n4d.server.core.Core.DEBUG:
-			print("[VariablesManager] %s"%data)
+		self.core.pprint("VariablesManager","%s"%data)
 			
 	#def dprint
 
