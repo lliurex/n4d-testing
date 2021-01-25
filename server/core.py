@@ -181,6 +181,14 @@ class Core:
 			
 	#def dstdout
 	
+	
+	def pprint(self,plugin_name,data):
+		
+		if Core.DEBUG:
+			print("[%s] %s"%(plugin_name,str(data)))
+		
+	#def pprint
+	
 	# ###################### #
 	# NETWORK RELATED FUNCTIONS #
 	

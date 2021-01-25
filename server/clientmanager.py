@@ -35,8 +35,7 @@ class ClientManager:
 	#def startup
 	
 	def dprint(self,data):
-		if self.core.DEBUG:
-			print("[ClientManager] %s"%str(data))
+		self.core.pprint("ClientManager","%s"%str(data))
 	#def dprint
 	
 	def start_register_to_server_thread(self):
