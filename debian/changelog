@@ -1,3 +1,10 @@
+n4d (0.911) UNRELEASED; urgency=medium
+
+  * Added get_version built-in function
+  * Exported unload_plugin function via built-in function
+
+ -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 25 Jan 2021 15:01:02 +0100
+
 n4d (0.910) focal; urgency=medium
 
   * Adding get_variables_list function
