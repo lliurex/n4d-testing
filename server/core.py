@@ -359,9 +359,10 @@ class Core:
 			try:
 				if not os.path.isfile(f):
 					continue
+				
 				f_name=f.replace(Core.BUILTIN_FUNCTIONS_PATH,"")
-				f_name=f_name.strip(".py").split("/")[-1]
 				self.dstdout("\t\t%s ... "%f_name)
+				f_name=f_name.strip(".py").split("/")[-1]
 				exec(open(f).read())
 				setattr(Core,"builtin_"+f_name,locals()[f_name])
 				if not f_name.startswith("_"):
