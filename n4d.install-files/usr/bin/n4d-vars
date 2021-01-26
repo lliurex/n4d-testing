@@ -57,7 +57,7 @@ class N4dVars:
 						self.offline_getvars(data[2:])
 				if data[1]=="listvars":
 					if self.is_n4d_running():
-						self.listvars()
+						self.list_vars()
 					else:
 						self.offline_getvars([],True)
 				if data[1]=="createjson":
@@ -72,7 +72,7 @@ class N4dVars:
 						self.usage()
 						sys.exit(0)
 						
-					self.createjson(vars,output)
+					self.create_json(vars,output)
 					
 				if data[1]=="setvalue":
 					try:
@@ -85,9 +85,9 @@ class N4dVars:
 					self.set_value(var,value)
 					
 				if data[1]=="readinbox":
-					self.readinbox()
+					self.read_inbox()
 				if data[1]=="emptytrash":
-					self.emptytrash()
+					self.empty_trash()
 				if data[1]=="help":
 					self.usage()
 		
@@ -162,21 +162,20 @@ class N4dVars:
 	#def empty_trash
 
 
-	def createjson(self,vars,output=None):
+	def create_json(self,vars,output=None):
 		
 		print("* Creating json file based on variables" + str(vars) + " ...")
 		package_info=str(raw_input("* Enter package name: "))
 
 		ok=False
 		dic={}
-			
+
 
 		for var in vars:
 			ok=False
 			dic[var]={}
 			print("* ["+var+"] info...")
 			while not ok:
-
 
 				print("* ["+var+"] Dependency type:" )
 				print("\t[1] Initialization dependency")
@@ -216,7 +215,7 @@ class N4dVars:
 		
 	#def createjson
 	
-	def listvars(self):
+	def list_vars(self):
 		
 		ret=self.client.get_variables()
 		if ret["status"]==0:
