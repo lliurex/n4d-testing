@@ -58,7 +58,10 @@ class Core:
 			Core.SINGLETON=Core(debug)
 			Core.SINGLETON.init()
 
-		return Core.SINGLETON
+		if Core.SINGLETON.load_ok:
+			return Core.SINGLETON
+		
+		return None
 	
 	@classmethod
 	def get_random_id(self):
@@ -75,12 +78,14 @@ class Core:
 	def __init__(self,debug_mode=False):
 		
 		Core.DEBUG=debug_mode
-		self.boot=False
-	
 		self.dprint("INIT ... ")
+		
+		self.load_ok=False
+		self.boot=False
+		
 		self.id=self.get_random_id()
-		self.create_n4d_dirs()
-		self.create_token()
+		self.load_ok=self.create_n4d_dirs()
+		self.load_ok=self.create_token()
 		
 		self.validation_history={}
 		self.builtin_protected_args={}
@@ -95,6 +100,9 @@ class Core:
 				
 		self.n4d_key=self.read_n4d_key()
 			
+		if not self.load_ok or not self.n4d_key:
+			#THIS, we are printing
+			print("You are either importing n4d.server.core outside n4d-server instance or something went really bad")
 		
 	#def init
 
@@ -318,9 +326,14 @@ class Core:
 				
 			if not os.path.exists(Core.LOG_DIR):
 				os.makedirs(Core.LOG_DIR)
+				
+			return True
+			
 		except:
 			self.dprint("You need root privileges to run this daemon")
-			sys.exit(1)
+			#sys.exit(1)
+			return False
+			
 			
 	#def create_n4d_dirs
 	
@@ -334,10 +347,12 @@ class Core:
 			f=open(Core.RUN_TOKEN,"w")
 			f.write(str(os.getpid()))
 			f.close()
+			return True
 			
 		except:
 			self.dprint("You need root privileges to run this daemon")
-			sys.exit(1)
+			#sys.exit(1)
+			return False
 
 	#def create_token
 	
