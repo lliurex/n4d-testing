@@ -5,6 +5,8 @@ n4d (0.911) focal; urgency=medium
   * changed failed_call and unhandled_error response API
   * removed TypeError exception handling for now
   * Bug fixes
+  * [Raul] fixed dh_n4dvars. no longer installs variable file in
+    /var/lib/n4d/variables. It only uses inbox directory
 
  -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 25 Jan 2021 15:01:02 +0100
 
