@@ -67,9 +67,7 @@ class DHelper():
             error_list.append('[{package}]: {file} has syntax error'.format(package=package, file=str(variable_file_path)))
         vars_template = {'package': package, 'inboxpath': str(self.n4d_inbox_path), 'varspath':str(self.n4d_vars_path), 'name': variable_file_path.name}
         Path('debian/{package}/{inboxpath}'.format(**vars_template)).mkdir(parents=True,exist_ok=True)
-        Path('debian/{package}/{varspath}'.format(**vars_template)).mkdir(parents=True, exist_ok=True)
         shutil.copyfile(str(variable_file_path), 'debian/{package}/{inboxpath}/{package}.n4dvars.{name}'.format(**vars_template))
-        shutil.copyfile(str(variable_file_path), 'debian/{package}/{varspath}/{package}.n4dvars.{name}'.format(**vars_template))
         self.packages_to_remove[package].append('{varspath}/{package}.n4dvars.{name}'.format(**vars_template))
         
         return error_list
