@@ -111,13 +111,14 @@ def build_invalid_arguments_response(ret_value,ret_msg=HUMAN_RESPONSES[INVALID_A
 #def build_invalid_arguments_response
 
 
-def build_failed_call_response(error_code=-1,ret_msg=HUMAN_RESPONSES[CALL_FAILED]):
+def build_failed_call_response(error_code=-1,ret_msg=HUMAN_RESPONSES[CALL_FAILED],tback_txt=""):
 	
 	ret={}
 	ret["msg"]=ret_msg
 	ret["status"]=CALL_FAILED
 	ret["return"]=None
 	ret["error_code"]=error_code
+	ret["traceback"]=""
 	
 	return ret
 	
