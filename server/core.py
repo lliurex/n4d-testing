@@ -518,7 +518,7 @@ class Core:
 					_verify_params(n4d_call_data)
 				else:
 					n4d_call_data["error"]="Unknown built-in method and/or class"
-					n4d_call_data["traceback"]="Not enough arguments to parse a standard n4d call"
+					n4d_call_data["traceback"]="[Core.parse_params] Not enough arguments to parse a standard n4d call."
 				
 			return n4d_call_data
 			
@@ -798,7 +798,7 @@ class Core:
 			n4d_call_data=self.parse_params(method,params)
 
 			if n4d_call_data["error"]!=None:
-				return n4d.responses.build_unhandled_error_response(None,n4d_call_data["error"],n4d_call_data["traceback"])
+				return n4d.responses.build_unhandled_error_response(n4d_call_data["error"],n4d_call_data["traceback"])
 
 			# If no exception is raised we are ok to authenticate
 			if not self.authenticate(n4d_call_data):
@@ -827,10 +827,10 @@ class Core:
 			tback=traceback.format_exc()
 			self.dprint("[!] Exception captured [!]")
 			self.dprint(tback)
-			if type(e)==TypeError:
-				response=n4d.responses.build_invalid_arguments_response(None,str(e))
-			else:
-				response=n4d.responses.build_unhandled_error_response(None,str(e),tback)
+			#if type(e)==TypeError:
+			#	response=n4d.responses.build_invalid_arguments_response(None,str(e),tback)
+			#else:
+			response=n4d.responses.build_unhandled_error_response(str(e),tback)
 
 			return response
 			raise e
