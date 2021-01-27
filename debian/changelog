@@ -1,7 +1,10 @@
-n4d (0.911) UNRELEASED; urgency=medium
+n4d (0.911) focal; urgency=medium
 
   * Added get_version built-in function
   * Exported unload_plugin function via built-in function
+  * changed failed_call and unhandled_error response API
+  * removed TypeError exception handling for now
+  * Bug fixes
 
  -- Hector Garcia Huerta <hectorgh@gmail.com>  Mon, 25 Jan 2021 15:01:02 +0100
 
