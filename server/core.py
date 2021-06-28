@@ -358,11 +358,21 @@ class Core:
 	
 	def get_user_groups(self,user):
 		
-		groups = [g.gr_name for g in grp.getgrall() if user in g.gr_mem]
+		##old groups method
+		#groups = [g.gr_name for g in grp.getgrall() if user in g.gr_mem]
+		#groups.append("*")
+		#groups.append("anonymous")
+		#gid = pwd.getpwnam(user).pw_gid
+		#groups.append(grp.getgrgid(gid).gr_name)
+
+		gid = pwd.getpwnam(user).pw_gid
+		groups_gids = os.getgrouplist(user, gid)
+		groups = [ grp.getgrgid(x).gr_name for x in groups_gids ]
+
 		groups.append("*")
 		groups.append("anonymous")
-		gid = pwd.getpwnam(user).pw_gid
 		groups.append(grp.getgrgid(gid).gr_name)
+
 		return groups
 		
 	#def get_user_groups
