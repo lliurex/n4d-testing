@@ -1,3 +1,9 @@
+n4d (0.912) focal; urgency=medium
+
+  * new CDC groups validation.
+
+ -- Daniel Duran <daduve@gmail.com>  Mon, 28 Jun 2021 09:53:41 +0200
+
 n4d (0.911) focal; urgency=medium
 
   * Added get_version built-in function
